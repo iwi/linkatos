@@ -1,7 +1,7 @@
 import os
 import time
 from slackclient import SlackClient
-
+import re
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -9,12 +9,15 @@ BOT_ID = os.environ.get("BOT_ID")
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = "do"
+WEB_LINK = "http"
+website_pattern = "http"
+prog = re.compile(website_pattern)
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
 
-def handle_command(command, channel):
+def handle_command(command, channel) :
     """
         Receives commands directed at the bot and determines if they
         are valid commands. If so, then acts on the commands. If not,
@@ -22,11 +25,11 @@ def handle_command(command, channel):
     """
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
-    if command.startswith(EXAMPLE_COMMAND):
+    if command.startswith(EXAMPLE_COMMAND) :
         response = "Sure...write some more code then I can do that!"
+       
     slack_client.api_call("chat.postMessage", channel=channel,
-                          text=response, as_user=True)
-
+                          text = response, as_user = True)
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -35,27 +38,31 @@ def parse_slack_output(slack_rtm_output):
         directed at the Bot, based on its ID.
     """
     output_list = slack_rtm_output
-    if output_list and len(output_list) > 0:
-        for output in output_list:
-            if output and 'text' in output and AT_BOT in output['text']:
+    if output_list and len(output_list) > 0 :
+        for output in output_list :
+            if output and 'text' in output and AT_BOT in output['text'] :
                 slack_client.api_call("chat.postMessage", \
                     channel = output['channel'], \
                     text = "r u talkin' to me?", as_user = True)
-
+            elif output and 'text' in output and (prog.match(output['text']) :
+                slack_client.api_call("chat.postMessage", \
+                    channel = output['channel'], \
+                    text = "this looks like a link. For now I won't do \
+                    anything with it", as_user = True)
                 # return text after the @ mention, whitespace removed
-                return output['text'].split(AT_BOT)[1].strip().lower(), \
-                       output['channel']
+        return output['text'].split(AT_BOT)[1].strip().lower(), \
+               output['channel']
     return None, None
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" :
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    if slack_client.rtm_connect():
+    if slack_client.rtm_connect() :
         print("linkatos is connected and running!")
         while True:
             command, channel = parse_slack_output(slack_client.rtm_read())
             if command and channel:
                 handle_command(command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
-    else:
+    else :
         print("Connection failed. Invalid Slack token or bot ID?")
