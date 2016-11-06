@@ -17,6 +17,12 @@ prog = re.compile(website_pattern)
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
 
+def bot_message (channel, text) :
+    return slack_client.api_call("chat.postMessage", 
+                                 channel = channel,
+                                 text = text,
+                                 as_user = True)
+
 def handle_command(command, channel) :
     """
         Receives commands directed at the bot and determines if they
@@ -27,10 +33,9 @@ def handle_command(command, channel) :
                "* command with numbers, delimited by spaces."
     if command.startswith(EXAMPLE_COMMAND) :
         response = "Sure...write some more code then I can do that!"
-       
-    slack_client.api_call("chat.postMessage", channel = channel,
-                          text = response,
-                          as_user = True)
+    
+    bot_message(channel, response)
+
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -53,11 +58,9 @@ def parse_slack_output(slack_rtm_output):
                     'text' in output and \
                     prog.search(output['text']) != None and \
                     output['user'] !=  BOT_ID :
-                slack_client.api_call("chat.postMessage", \
-                    channel = output['channel'], \
-                    text = "It looks like you posted a link. /n \
-                    The link is: " + prog.search(output['text']).group(0),\
-                    as_user = True)
+                response = "It looks like you posted a link. /n \
+                    The link is: " + prog.search(output['text']).group(0)
+                bot_message(output['channel'], response)
                 # return text after the @ mention, whitespace removed
                 return output['text'].strip().lower(), output['channel']
     return None, None
