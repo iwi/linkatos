@@ -73,17 +73,18 @@ def parse_slack_output(slack_rtm_output):
             # determine the filter
             website_pattern = "https?://\S+(\s|$)"
             prog = re.compile(website_pattern)
-
-            if output and \
+            message_contains_a_link = \
+                    output and \
                     'text' in output and \
                     prog.search(output['text']) != None and \
                     output['user'] !=  BOT_ID : # avoid linkatos messages
 
+            if message_contains_a_link :
                 response = "It looks like you posted a link. \
                     The link is: " + prog.search(output['text']).group(0)
                 bot_says(output['channel'], response)
-                # return text after the @ mention, whitespace removed
-                command = output['text'].strip().lower()
+                # return the website address and strip out whitespaces if any
+                command = output['text'].strip()
 
     return command, channel, message_is_addressed_to_bot
 
