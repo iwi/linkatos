@@ -20,6 +20,7 @@ def bot_says (channel, text) :
                                  text = text,
                                  as_user = True)
 
+
 def handle_command (command, channel) :
     """
         Receives commands directed at the bot and determines if they
@@ -28,10 +29,13 @@ def handle_command (command, channel) :
     """
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
+
     if command.startswith(EXAMPLE_COMMAND) :
         response = "Sure...write some more code then I can do that!"
 
     bot_says(channel, response)
+
+    return None
 
 
 def parse_slack_output(slack_rtm_output):
@@ -95,7 +99,7 @@ if __name__ == "__main__" :
     if slack_client.rtm_connect() :
         print "linkatos is connected and running!"
         while True:
-            print "linkatos listening"
+            print "linkatos is listening"
             # parse the messages and get 'None' while they're empty
             command, channel, message_is_addressed_to_bot = \
                     parse_slack_output(slack_client.rtm_read())
