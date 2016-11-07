@@ -10,12 +10,18 @@ BOT_ID = os.environ.get("BOT_ID")
 AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = "do"
 WEB_LINK = "http"
-website_pattern = "http"
+website_pattern = "https?://\S+(\s|$)"
 prog = re.compile(website_pattern)
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
 
+
+def bot_message (channel, text) :
+    return slack_client.api_call("chat.postMessage", 
+                                 channel = channel,
+                                 text = text,
+                                 as_user = True)
 
 def handle_command(command, channel) :
     """
@@ -27,9 +33,9 @@ def handle_command(command, channel) :
                "* command with numbers, delimited by spaces."
     if command.startswith(EXAMPLE_COMMAND) :
         response = "Sure...write some more code then I can do that!"
-       
-    slack_client.api_call("chat.postMessage", channel=channel,
-                          text = response, as_user = True)
+    
+    bot_message(channel, response)
+
 
 def parse_slack_output(slack_rtm_output):
     """
@@ -38,20 +44,25 @@ def parse_slack_output(slack_rtm_output):
         directed at the Bot, based on its ID.
     """
     output_list = slack_rtm_output
+    print output_list
     if output_list and len(output_list) > 0 :
         for output in output_list :
             if output and 'text' in output and AT_BOT in output['text'] :
-                slack_client.api_call("chat.postMessage", \
-                    channel = output['channel'], \
-                    text = "r u talkin' to me?", as_user = True)
-            elif output and 'text' in output and (prog.match(output['text']) :
-                slack_client.api_call("chat.postMessage", \
-                    channel = output['channel'], \
-                    text = "this looks like a link. For now I won't do \
-                    anything with it", as_user = True)
+                slack_client.api_call("chat.postMessage", 
+                    channel = output['channel'], 
+                    text = "r u talkin' to me?",
+                    as_user = True)
+                return output['text'].split(AT_BOT)[1].strip().lower(), \
+                     output['channel']
+            elif output and \
+                    'text' in output and \
+                    prog.search(output['text']) != None and \
+                    output['user'] !=  BOT_ID :
+                response = "It looks like you posted a link. /n \
+                    The link is: " + prog.search(output['text']).group(0)
+                bot_message(output['channel'], response)
                 # return text after the @ mention, whitespace removed
-        return output['text'].split(AT_BOT)[1].strip().lower(), \
-               output['channel']
+                return output['text'].strip().lower(), output['channel']
     return None, None
 
 
