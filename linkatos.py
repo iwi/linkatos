@@ -40,37 +40,50 @@ def parse_slack_output(slack_rtm_output):
         this parsing function returns None unless a message is
         directed at the Bot, based on its ID.
     """
+    # default outcome
+    command = None
+    channel = None
+
     output_list = slack_rtm_output
     print output_list
     if output_list and len(output_list) > 0 :
         for output in output_list :
+            channel = output['channel']
             # determine the filter
             website_pattern = "https?://\S+(\s|$)"
             prog = re.compile(website_pattern)
+
+            # if the message is directed to linkatos
             if output and 'text' in output and AT_BOT in output['text'] :
                 bot_message("r u talkin' to me?", output['channel'])
-                return output['text'].split(AT_BOT)[1].strip().lower(), \
-                     output['channel']
-            elif output and \
+                command = output['text'].split(AT_BOT)[1].strip().lower()
+
+            # if the message contains a link
+            if output and \
                     'text' in output and \
                     prog.search(output['text']) != None and \
-                    output['user'] !=  BOT_ID :
+                    output['user'] !=  BOT_ID : # avoid linkatos messages
                 response = "It looks like you posted a link. /n \
                     The link is: " + prog.search(output['text']).group(0)
                 bot_message(output['channel'], response)
                 # return text after the @ mention, whitespace removed
-                return output['text'].strip().lower(), output['channel']
-    return None, None
+                command = output['text'].strip().lower()
+
+    return command, channel 
 
 
 if __name__ == "__main__" :
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
+    # verify linkatos connection
     if slack_client.rtm_connect() :
         print("linkatos is connected and running!")
         while True:
+            print("linkatos listening")
             command, channel = parse_slack_output(slack_client.rtm_read())
             if command and channel:
                 handle_command(command, channel)
             time.sleep(READ_WEBSOCKET_DELAY)
+
     else :
         print("Connection failed. Invalid Slack token or bot ID?")
+
