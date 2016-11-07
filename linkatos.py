@@ -9,9 +9,6 @@ BOT_ID = os.environ.get("BOT_ID")
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = "do"
-WEB_LINK = "http"
-website_pattern = "https?://\S+(\s|$)"
-prog = re.compile(website_pattern)
 
 # instantiate Slack & Twilio clients
 slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
@@ -47,11 +44,11 @@ def parse_slack_output(slack_rtm_output):
     print output_list
     if output_list and len(output_list) > 0 :
         for output in output_list :
+            # determine the filter
+            website_pattern = "https?://\S+(\s|$)"
+            prog = re.compile(website_pattern)
             if output and 'text' in output and AT_BOT in output['text'] :
-                slack_client.api_call("chat.postMessage", 
-                    channel = output['channel'], 
-                    text = "r u talkin' to me?",
-                    as_user = True)
+                bot_message("r u talkin' to me?", output['channel'])
                 return output['text'].split(AT_BOT)[1].strip().lower(), \
                      output['channel']
             elif output and \
