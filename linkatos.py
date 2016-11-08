@@ -21,22 +21,34 @@ def bot_says (channel, text) :
                                  as_user = True)
 
 
-def handle_command (command, channel) :
+def store_link (link, channel) :
     """
-        Receives commands directed at the bot and determines if they
-        are valid commands. If so, then acts on the commands. If not,
-        returns back what it needs for clarification.
+        Receives a link.
+        Stores it in the db.
+        Sends a confirmation message.
     """
 
-    response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
+    error = db.store(link)
+    message = "Success! The link has been stored"
 
-    if command.startswith(EXAMPLE_COMMAND) :
-        response = "Sure...write some more code then I can do that!"
+    if error :
+        message = "ERROR: the link could not be stored"
 
-    bot_says(channel, response)
+    bot_says(channel, message)
 
     return None
+
+
+def message_contains_link (message) :
+    """
+    Returns a link if it matches the regex
+    """
+    website_pattern = "https?://\S+(\s|$)"
+    prog = re.compile(website_pattern)
+    return prog.search(output['text']) 
+     
+
+
 
 
 def parse_slack_output(slack_rtm_output):
@@ -53,7 +65,7 @@ def parse_slack_output(slack_rtm_output):
     """
 
     # default outcome
-    command = None
+    extract = None
     channel = None
     message_is_addressed_to_bot = None
 
@@ -65,14 +77,7 @@ def parse_slack_output(slack_rtm_output):
             # when there is a message then get the channel
             if channel : channel = output['channel']
 
-            # if the message is directed to linkatos
-            message_is_addressed_to_bot = output and \
-                    'text' in output and \
-                    AT_BOT in output['text'] 
-
-            if message_is_addressed_to_bot :
-                bot_says(output['channel'], "r u talkin' to me?")
-                command = output['text'].split(AT_BOT)[1].strip().lower()
+            
 
             # if the message contains a link
             # determine the filter
@@ -90,6 +95,16 @@ def parse_slack_output(slack_rtm_output):
                 bot_says(output['channel'], response)
                 # return the website address and strip out whitespaces if any
                 command = output['text'].strip()
+
+            # if the message is directed to linkatos
+            message_is_addressed_to_bot = output and \
+                    'text' in output and \
+                    AT_BOT in output['text'] 
+
+            if message_is_addressed_to_bot :
+                bot_says(output['channel'], "r u talkin' to me?")
+                extract = output['text'].split(AT_BOT)[1].strip().lower()
+
 
     return command, channel, message_is_addressed_to_bot
 
