@@ -102,13 +102,19 @@ if __name__ == '__main__' :
         while True:
             print "linkatos is listening"
 
-            # parse the messages and get 'None' while they're empty
+            # parse the messages. Get 'None' while they're empty
             command, channel, message_is_addressed_to_bot = \
                     parse_slack_output(slack_client.rtm_read())
 
             # handle the command when it is addressed to linkatos
-            if message_is_addressed_to_bot and command and channel:
+            if message_is_addressed_to_bot and command and channel :
                 handle_command(command, channel)
+
+            # handle the command when it is a http address
+            if command and channel and !message_is_addressed_to_bot :
+                bot_says(channel, "Do you want to keep the link " + command + \
+                        "?")
+            #    if answer...
 
             time.sleep(READ_WEBSOCKET_DELAY)
 
