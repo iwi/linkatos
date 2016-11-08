@@ -11,7 +11,7 @@ AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+slack_client = SlackClient(os.environ.get("SLACK_BOT_TOKEN"))
 
 
 def bot_says (channel, text) :
@@ -27,6 +27,7 @@ def handle_command (command, channel) :
         are valid commands. If so, then acts on the commands. If not,
         returns back what it needs for clarification.
     """
+
     response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
                "* command with numbers, delimited by spaces."
 
@@ -49,9 +50,9 @@ def parse_slack_output(slack_rtm_output):
         the message was posted and the relevant information from the message.
 
         Maybe worth including a flag for the type of outcome?
-
     """
-    # default outcom
+
+    # default outcome
     command = None
     channel = None
     message_is_addressed_to_bot = None
@@ -93,13 +94,14 @@ def parse_slack_output(slack_rtm_output):
     return command, channel, message_is_addressed_to_bot
 
 
-if __name__ == "__main__" :
+if __name__ == '__main__' :
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
     # verify linkatos connection
     if slack_client.rtm_connect() :
         print "linkatos is connected and running!"
         while True:
             print "linkatos is listening"
+
             # parse the messages and get 'None' while they're empty
             command, channel, message_is_addressed_to_bot = \
                     parse_slack_output(slack_client.rtm_read())
