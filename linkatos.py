@@ -45,29 +45,23 @@ def message_contains_link (message) :
     """
     website_pattern = "https?://\S+(\s|$)"
     prog = re.compile(website_pattern)
-    return prog.search(output['text']) 
-     
-
-
+    return prog.search(output['text']).strip() 
 
 
 def parse_slack_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
-        this parsing function returns None unless:
-        1. a message is directed at linkatos, based on its ID.
-        2. someone posts a website link starting with http
+        this parsing function returns None unless
+        someone posts a website link starting with httpS?//
 
-        In these situations the function will return the channel where
-        the message was posted and the relevant information from the message.
+        In these situations the function will return the link and the channel 
+        where the message was posted.
 
-        Maybe worth including a flag for the type of outcome?
     """
 
     # default outcome
-    extract = None
+    link = None
     channel = None
-    message_is_addressed_to_bot = None
 
     output_list = slack_rtm_output
     print output_list  # print the list of outputs to get them on screen
@@ -77,36 +71,18 @@ def parse_slack_output(slack_rtm_output):
             # when there is a message then get the channel
             if channel : channel = output['channel']
 
-            
+            if output and output['text'] and output['user'] != BOT_ID :
+                link = message_contains_a_link(output['text'])            
 
-            # if the message contains a link
-            # determine the filter
-            website_pattern = "https?://\S+(\s|$)"
-            prog = re.compile(website_pattern)
-            message_contains_a_link = \
-                    output and \
-                    'text' in output and \
-                    prog.search(output['text']) != None and \
-                    output['user'] !=  BOT_ID : # avoid linkatos messages
-
-            if message_contains_a_link :
+            if message_contains_a_link(text) :
+                link = message_contains_a_link(text)
                 response = "It looks like you posted a link. \
-                    The link is: " + prog.search(output['text']).group(0)
-                bot_says(output['channel'], response)
-                # return the website address and strip out whitespaces if any
-                command = output['text'].strip()
+                    The link is: " + link.group(0)
+                bot_says(channel,
+                         "It looks like you posted a link. \
+                             The link is: " + link.group(0)
 
-            # if the message is directed to linkatos
-            message_is_addressed_to_bot = output and \
-                    'text' in output and \
-                    AT_BOT in output['text'] 
-
-            if message_is_addressed_to_bot :
-                bot_says(output['channel'], "r u talkin' to me?")
-                extract = output['text'].split(AT_BOT)[1].strip().lower()
-
-
-    return command, channel, message_is_addressed_to_bot
+    return link, channel
 
 
 if __name__ == '__main__' :
@@ -118,18 +94,17 @@ if __name__ == '__main__' :
             print "linkatos is listening"
 
             # parse the messages. Get 'None' while they're empty
-            command, channel, message_is_addressed_to_bot = \
-                    parse_slack_output(slack_client.rtm_read())
-
-            # handle the command when it is addressed to linkatos
-            if message_is_addressed_to_bot and command and channel :
-                handle_command(command, channel)
+            link, channel = parse_slack_output(slack_client.rtm_read())
 
             # handle the command when it is a http address
-            if command and channel and !message_is_addressed_to_bot :
-                bot_says(channel, "Do you want to keep the link " + command + \
-                        "?")
-            #    if answer...
+            if link and channel :
+                bot_says(channel, "Do you want me to store the link " + \
+                        link + " for you?") 
+                
+                # parse answerif answer...
+                response = parse_response_from_user(slack_client.rtm_read())
+                if response :
+                    store_link(link)
 
             time.sleep(READ_WEBSOCKET_DELAY)
 
