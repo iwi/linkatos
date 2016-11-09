@@ -5,13 +5,14 @@ import re
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN"))
 
 # constants
 AT_BOT = "<@" + BOT_ID + ">"
 EXAMPLE_COMMAND = "do"
 
 # instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get("SLACK_BOT_TOKEN"))
+slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 
 def bot_says (channel, text) :
