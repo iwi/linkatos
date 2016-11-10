@@ -31,16 +31,16 @@ export BOT_ID='bot ID'
 
 ## Tests
 
-
-
+Lorem ipsum
 
 
 ## Tools
 
 The initial choices of tools are:
-  - Python to create the bot
-  - Beep Boop to host and run the bot
-  - Firebase to store the links
+  - Python 3 to create the bot
+  - [Beep Boop](https://beepboophq.com) to host and run the bot
+  - [Firebase](https://firebase.google.com) to store the links
+
 
 ## Sources
 
