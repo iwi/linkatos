@@ -80,10 +80,12 @@ def parse_output (slack_rtm_output, link_re):
             if output and 'text' in output and output['user'] != BOT_ID:
                 finding = message_contains_a_link(output['text'])
                 if finding is not None:
+                    print(finding)
                     output_type = 'link' 
-                finding = message_contains_a_yes(output['text'])
-                if finding is not None:
-                    output_type = 'yes' 
+                else:
+                    finding = message_contains_a_yes(output['text'])
+                    if finding is not None:
+                        output_type = 'yes' 
 
             if output and 'channel' in output:
                 channel = output['channel']
