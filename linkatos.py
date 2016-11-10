@@ -1,3 +1,4 @@
+#! /bin/env python
 import os
 import time
 from slackclient import SlackClient
@@ -5,75 +6,128 @@ import re
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 
-# constants
-AT_BOT = "<@" + BOT_ID + ">"
-EXAMPLE_COMMAND = "do"
-WEB_LINK = "http"
-website_pattern = "https?://\S+(\s|$)"
-prog = re.compile(website_pattern)
-
-# instantiate Slack & Twilio clients
-slack_client = SlackClient(os.environ.get('SLACK_BOT_TOKEN'))
+# instantiate Slack clients
+slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 
-def bot_message (channel, text) :
-    return slack_client.api_call("chat.postMessage", 
-                                 channel = channel,
-                                 text = text,
-                                 as_user = True)
+def bot_says (channel, text):
+    return slack_client.api_call("chat.postMessage",
+                                 channel=channel,
+                                 text=text,
+                                 as_user=True)
 
-def handle_command(command, channel) :
+
+def store_link (link, channel):
     """
-        Receives commands directed at the bot and determines if they
-        are valid commands. If so, then acts on the commands. If not,
-        returns back what it needs for clarification.
+     ------------------- INACTIVE FUNCTION
+        Receives a link.
+        Stores it in the db.
+        Sends a confirmation message.
     """
-    response = "Not sure what you mean. Use the *" + EXAMPLE_COMMAND + \
-               "* command with numbers, delimited by spaces."
-    if command.startswith(EXAMPLE_COMMAND) :
-        response = "Sure...write some more code then I can do that!"
-    
-    bot_message(channel, response)
+    error = db.store(link)
+    message = "Success! The link has been stored"
+
+    if error:
+        message = "ERROR: the link could not be stored"
+
+    bot_says(channel, message)
+
+    return None
 
 
-def parse_slack_output(slack_rtm_output):
+def message_contains_a_link (message):
+    """
+    Returns a link if it matches the regex
+    """
+    answer = link_re.search(message)
+    if answer is not None:
+        answer = answer.group(0).strip()
+
+    return answer
+
+
+
+def message_contains_a_yes (message):
+    """
+    Returns a link if it matches the regex
+    """
+    answer = yes_re.search(message)
+    if answer is not None:
+        answer = answer.group(0).strip()
+
+    return answer
+
+
+def parse_output (slack_rtm_output, link_re):
     """
         The Slack Real Time Messaging API is an events firehose.
-        this parsing function returns None unless a message is
-        directed at the Bot, based on its ID.
+        this parsing function returns None unless
+        someone posts a website link starting with httpS?// or a yes
     """
+    # default outcome
+    finding = None
+    channel = None
+    output_type = None
+
     output_list = slack_rtm_output
-    print output_list
-    if output_list and len(output_list) > 0 :
-        for output in output_list :
-            if output and 'text' in output and AT_BOT in output['text'] :
-                slack_client.api_call("chat.postMessage", 
-                    channel = output['channel'], 
-                    text = "r u talkin' to me?",
-                    as_user = True)
-                return output['text'].split(AT_BOT)[1].strip().lower(), \
-                     output['channel']
-            elif output and \
-                    'text' in output and \
-                    prog.search(output['text']) != None and \
-                    output['user'] !=  BOT_ID :
-                response = "It looks like you posted a link. /n \
-                    The link is: " + prog.search(output['text']).group(0)
-                bot_message(output['channel'], response)
-                # return text after the @ mention, whitespace removed
-                return output['text'].strip().lower(), output['channel']
-    return None, None
+    print(output_list)  # print the list of outputs to get them on screen
+
+    if output_list and len(output_list) > 0:
+        for output in output_list:
+            # when there is a message then get the channel
+            if output and 'text' in output and output['user'] != BOT_ID:
+                finding = message_contains_a_link(output['text'])
+                if finding is not None:
+                    output_type = 'link' 
+                else:
+                    finding = message_contains_a_yes(output['text'])
+                    if finding is not None:
+                        output_type = 'yes' 
+
+            if output and 'channel' in output:
+                channel = output['channel']
+
+    return (finding, channel, output_type)
 
 
-if __name__ == "__main__" :
+if __name__ == '__main__':
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    if slack_client.rtm_connect() :
+    # Precompile regex patterns
+    link_re = re.compile("https?://\S+(\s|$)")
+    yes_re = re.compile("[Yy][eE].[sS].")
+
+    # verify linkatos connection
+    if slack_client.rtm_connect():
         print("linkatos is connected and running!")
+
         while True:
-            command, channel = parse_slack_output(slack_client.rtm_read())
-            if command and channel:
-                handle_command(command, channel)
+            print("linkatos is listening")
+
+            # parse the messages. Get 'None' while they're empty
+            (link, channel, output_type) = \
+                    parse_output(slack_client.rtm_read(), link_re)
+
+            # handle the command when it is a http address
+            if link is not None and output_type is 'link' and channel:
+                bot_says(channel, "Do you want me to store the link " + \
+                        link + " for you?")
+
+                # parse answerif answer...
+                (answer, channel, output_type) = \
+                    parse_output(slack_client.rtm_read(), yes_re)
+                print(answer)
+
+                # just to debug
+                if answer is not None:
+                    print("you said Yes")
+
+                #if response:
+                #    store_link(link)
+
             time.sleep(READ_WEBSOCKET_DELAY)
-    else :
+
+    else:
         print("Connection failed. Invalid Slack token or bot ID?")
+
