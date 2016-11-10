@@ -6,7 +6,7 @@ import re
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
-SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN"))
+SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 
 # instantiate Slack clients
 slack_client = SlackClient(SLACK_BOT_TOKEN)
@@ -14,13 +14,14 @@ slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 def bot_says (channel, text):
     return slack_client.api_call("chat.postMessage",
-                                 channel = channel,
-                                 text = text,
-                                 as_user = True)
+                                 channel=channel,
+                                 text=text,
+                                 as_user=True)
 
 
 def store_link (link, channel):
     """
+     ------------------- INACTIVE FUNCTION
         Receives a link.
         Stores it in the db.
         Sends a confirmation message.
@@ -40,24 +41,35 @@ def message_contains_a_link (message):
     """
     Returns a link if it matches the regex
     """
-    website_pattern = "https?://\S+(\s|$)"
-    prog = re.compile(website_pattern)
+    answer = link_re.search(message)
+    if answer is not None:
+        answer = answer.strip()
 
-    return prog.search(message).strip()
+    return answer
 
 
-def parse_slack_output(slack_rtm_output):
+
+def message_contains_a_yes (message):
+    """
+    Returns a link if it matches the regex
+    """
+    answer = yes_re.search(message)
+    if answer is not None:
+        answer = answer.strip()
+
+    return answer
+
+
+def parse_output (slack_rtm_output, link_re):
     """
         The Slack Real Time Messaging API is an events firehose.
         this parsing function returns None unless
-        someone posts a website link starting with httpS?//
-
-        In these situations the function will return the link and the channel
-        where the message was posted.
+        someone posts a website link starting with httpS?// or a yes
     """
     # default outcome
-    link = None
+    finding = None
     channel = None
+    output_type = None
 
     output_list = slack_rtm_output
     print(output_list)  # print the list of outputs to get them on screen
@@ -65,64 +77,54 @@ def parse_slack_output(slack_rtm_output):
     if output_list and len(output_list) > 0:
         for output in output_list:
             # when there is a message then get the channel
-            channel = output['channel']
+            if output and 'text' in output and output['user'] != BOT_ID:
+                finding = message_contains_a_link(output['text'])
+                if finding is not None:
+                    output_type = 'link' 
+                finding = message_contains_a_yes(output['text'])
+                if finding is not None:
+                    output_type = 'yes' 
 
-            if output and output['text'] and output['user'] != BOT_ID:
-                link = message_contains_a_link(output['text'])
+            if output and 'channel' in output:
+                channel = output['channel']
 
-            if link:
-                response = "It looks like you posted a link. \
-                    The link is: " + link.group(0)
-                bot_says(channel,
-                         "It looks like you posted a link. \
-                             The link is: " + link.group(0)
 
-    return (link, channel)
-
-def parse_slack_output(slack_rtm_output):
-    """
-       Not ready ... Verify if there is a 'yes' on the response
-
-    """
-    # default outcome
-    there_is_a_yes = False
-    channel = None
-
-    output_list = slack_rtm_output
-    print(output_list)  # print the list of outputs to get them on screen
-
-    if output_list and len(output_list) > 0:
-        for output in output_list:
-            # when there is a message then get the channel
-            channel = output['channel']
-
-            if output and output['text'] and output['user'] != BOT_ID:
-                there_is_a_yes = (output['text'])
-
-    return yes, channel
-
+    return (finding, channel, output_type)
 
 
 if __name__ == '__main__':
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
+    # Precompile regex patterns
+    link_re = re.compile("https?://\S+(\s|$)")
+    yes_re = re.compile("[Yy][eE].[sS].")
+
     # verify linkatos connection
     if slack_client.rtm_connect():
         print("linkatos is connected and running!")
+
         while True:
             print("linkatos is listening")
 
             # parse the messages. Get 'None' while they're empty
-            link, channel = parse_slack_output(slack_client.rtm_read())
+            (link, channel, output_type) = parse_output(slack_client.rtm_read(), link_re)
 
             # handle the command when it is a http address
-            if link and channel:
+            if output_type is 'link' and channel:
                 bot_says(channel, "Do you want me to store the link " + \
                         link + " for you?")
 
                 # parse answerif answer...
-                response = parse_response_from_user(slack_client.rtm_read())
-                if response:
-                    store_link(link)
+                (answer, channel, output_type) = \
+                    parse_output(slack_client.rtm_read(), yes_re)
+
+                # just to debug
+                if answer:
+                    print("you said Yes")
+                else:
+                    print("you didn't say Yes")
+
+                #if response:
+                #    store_link(link)
 
             time.sleep(READ_WEBSOCKET_DELAY)
 
