@@ -1,5 +1,3 @@
-**.swp
-info.md
 *.pyc
 .cache
 .env-*
