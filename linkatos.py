@@ -80,7 +80,6 @@ def parse_output (slack_rtm_output, link_re):
             if output and 'text' in output and output['user'] != BOT_ID:
                 finding = message_contains_a_link(output['text'])
                 if finding is not None:
-                    print(finding)
                     output_type = 'link' 
                 else:
                     finding = message_contains_a_yes(output['text'])
@@ -89,7 +88,6 @@ def parse_output (slack_rtm_output, link_re):
 
             if output and 'channel' in output:
                 channel = output['channel']
-
 
     return (finding, channel, output_type)
 
@@ -108,7 +106,8 @@ if __name__ == '__main__':
             print("linkatos is listening")
 
             # parse the messages. Get 'None' while they're empty
-            (link, channel, output_type) = parse_output(slack_client.rtm_read(), link_re)
+            (link, channel, output_type) = \
+                    parse_output(slack_client.rtm_read(), link_re)
 
             # handle the command when it is a http address
             if link is not None and output_type is 'link' and channel:
@@ -118,6 +117,7 @@ if __name__ == '__main__':
                 # parse answerif answer...
                 (answer, channel, output_type) = \
                     parse_output(slack_client.rtm_read(), yes_re)
+                print(answer)
 
                 # just to debug
                 if answer is not None:
