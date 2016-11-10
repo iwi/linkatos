@@ -43,7 +43,7 @@ def message_contains_a_link (message):
     """
     answer = link_re.search(message)
     if answer is not None:
-        answer = answer.strip()
+        answer = answer.group(0).strip()
 
     return answer
 
@@ -55,7 +55,7 @@ def message_contains_a_yes (message):
     """
     answer = yes_re.search(message)
     if answer is not None:
-        answer = answer.strip()
+        answer = answer.group(0).strip()
 
     return answer
 
@@ -109,7 +109,7 @@ if __name__ == '__main__':
             (link, channel, output_type) = parse_output(slack_client.rtm_read(), link_re)
 
             # handle the command when it is a http address
-            if output_type is 'link' and channel:
+            if link is not None and output_type is 'link' and channel:
                 bot_says(channel, "Do you want me to store the link " + \
                         link + " for you?")
 
@@ -118,10 +118,8 @@ if __name__ == '__main__':
                     parse_output(slack_client.rtm_read(), yes_re)
 
                 # just to debug
-                if answer:
+                if answer is not None:
                     print("you said Yes")
-                else:
-                    print("you didn't say Yes")
 
                 #if response:
                 #    store_link(link)
