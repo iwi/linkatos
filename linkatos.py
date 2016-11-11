@@ -2,8 +2,11 @@
 import os
 import time
 from slackclient import SlackClient
-import re
-import linkatos.message_contains_a_link as message_contains_a_link
+from linkatos.message_contains_a_link import message_contains_a_link
+from linkatos.message_contains_a_yes import message_contains_a_yes
+
+
+
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -38,7 +41,7 @@ def store_link (link, channel):
     return None
 
 
-def parse_output (slack_rtm_output, link_re):
+def parse_output (slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
         this parsing function returns None unless
@@ -72,9 +75,6 @@ def parse_output (slack_rtm_output, link_re):
 
 if __name__ == '__main__':
     READ_WEBSOCKET_DELAY = 1 # 1 second delay between reading from firehose
-    # Precompile regex patterns
-    link_re = re.compile("https?://\S+(\s|$)")
-    yes_re = re.compile("[Yy][eE].[sS].")
 
     # verify linkatos connection
     if slack_client.rtm_connect():
@@ -85,7 +85,7 @@ if __name__ == '__main__':
 
             # parse the messages. Get 'None' while they're empty
             (link, channel, output_type) = \
-                    parse_output(slack_client.rtm_read(), link_re)
+                    parse_output(slack_client.rtm_read())
 
             # handle the command when it is a http address
             if link is not None and output_type is 'link' and channel:
@@ -94,7 +94,7 @@ if __name__ == '__main__':
 
                 # parse answerif answer...
                 (answer, channel, output_type) = \
-                    parse_output(slack_client.rtm_read(), yes_re)
+                    parse_output(slack_client.rtm_read())
                 print(answer)
 
                 # just to debug
