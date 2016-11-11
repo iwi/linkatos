@@ -1,8 +1,7 @@
-**.swp
-info.md
 *.pyc
 .cache
 .env-*
+.git
 __pycache__
 build
 dist

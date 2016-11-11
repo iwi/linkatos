@@ -4,6 +4,7 @@ import time
 from slackclient import SlackClient
 import re
 
+
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
@@ -80,11 +81,11 @@ def parse_output (slack_rtm_output, link_re):
             if output and 'text' in output and output['user'] != BOT_ID:
                 finding = message_contains_a_link(output['text'])
                 if finding is not None:
-                    output_type = 'link' 
+                    output_type = 'link'
                 else:
                     finding = message_contains_a_yes(output['text'])
                     if finding is not None:
-                        output_type = 'yes' 
+                        output_type = 'yes'
 
             if output and 'channel' in output:
                 channel = output['channel']
