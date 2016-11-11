@@ -1,7 +1,7 @@
 #! /bin/env python
 import re
 
-yes_re = re.compile("[Yy][eE].[sS].")
+yes_re = re.compile("(Yes|YES|yes)")
 
 def message_contains_a_yes (message):
     """
