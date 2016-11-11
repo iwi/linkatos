@@ -38,17 +38,6 @@ def store_link (link, channel):
     return None
 
 
-def message_contains_a_yes (message):
-    """
-    Returns a link if it matches the regex
-    """
-    answer = yes_re.search(message)
-    if answer is not None:
-        answer = answer.group(0).strip()
-
-    return answer
-
-
 def parse_output (slack_rtm_output, link_re):
     """
         The Slack Real Time Messaging API is an events firehose.
