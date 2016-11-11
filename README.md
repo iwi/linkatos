@@ -11,23 +11,9 @@ This project intends to:
 ## Running the bot
 
 Currently the bot can only be run with:
+  ```sh
+  SLACK_BOT_TOKEN=apitoken BOT_ID=botid ./linkatos.py
   ```
-  $ python linkatos.py
-  ```
-
-It's necessary to add the following environment variables:
-
-### API token
-
-```
-export SLACK_BOT_TOKEN='API token name'
-```
-
-### Bot ID
-
-```
-export BOT_ID='bot ID'
-```
 
 ## Tests
 
@@ -48,3 +34,6 @@ The slack bot was based on:
 > A simple Python-powered starter Slack bot
 > [the tutorial](https://www.fullstackpython.com/blog/build-first-slack-bot-python.html)
 
+## Licence
+
+See [LICENCE](https://github.com/iwi/linkatos/blob/master/LICENSE)
