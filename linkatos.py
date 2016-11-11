@@ -3,7 +3,7 @@ import os
 import time
 from slackclient import SlackClient
 import re
-
+import linkatos.message_contains_a_link as message_contains_a_link
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -36,18 +36,6 @@ def store_link (link, channel):
     bot_says(channel, message)
 
     return None
-
-
-def message_contains_a_link (message):
-    """
-    Returns a link if it matches the regex
-    """
-    answer = link_re.search(message)
-    if answer is not None:
-        answer = answer.group(0).strip()
-
-    return answer
-
 
 
 def message_contains_a_yes (message):
