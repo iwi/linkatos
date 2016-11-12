@@ -6,8 +6,6 @@ from linkatos.message_contains_a_link import message_contains_a_link
 from linkatos.message_contains_a_yes import message_contains_a_yes
 
 
-
-
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
