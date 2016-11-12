@@ -1,8 +1,8 @@
-#! /bin/env python
+#! /usr/bin/env python
 import os
 import time
 from slackclient import SlackClient
-import message
+import linkatos
 
 
 # starterbot's ID as an environment variable
