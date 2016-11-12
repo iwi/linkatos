@@ -2,8 +2,7 @@
 import os
 import time
 from slackclient import SlackClient
-from linkatos.message_contains_a_link import message_contains_a_link
-from linkatos.message_contains_a_yes import message_contains_a_yes
+import message
 
 
 # starterbot's ID as an environment variable
@@ -57,11 +56,11 @@ def parse_output(slack_rtm_output):
         for output in output_list:
             # when there is a message then get the channel
             if output and 'text' in output and output['user'] != BOT_ID:
-                finding = message_contains_a_link(output['text'])
+                finding = message.contains_a_link(output['text'])
                 if finding is not None:
                     output_type = 'link'
                 else:
-                    finding = message_contains_a_yes(output['text'])
+                    finding = message.contains_a_yes(output['text'])
                     if finding is not None:
                         output_type = 'yes'
 
@@ -82,8 +81,8 @@ if __name__ == '__main__':
             print("linkatos is listening")
 
             # parse the messages. Get 'None' while they're empty
-            (link, channel, output_type) = \
-                parse_output(slack_client.rtm_read())
+            messages = slack_client.rtm_read()
+            (link, channel, output_type) = parse_output(messages)
 
             # handle the command when it is a http address
             if link is not None and output_type is 'link' and channel:
@@ -91,8 +90,8 @@ if __name__ == '__main__':
                          link + " for you?")
 
                 # parse answerif answer...
-                (answer, channel, output_type) = \
-                    parse_output(slack_client.rtm_read())
+                messages = slack_client.rtm_read()
+                (answer, channel, output_type) = parse_output(messages)
                 print(answer)
 
                 # just to debug
