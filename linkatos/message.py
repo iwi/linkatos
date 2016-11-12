@@ -5,7 +5,7 @@ yes_re = re.compile("(Yes|YES|yes)")
 
 def extract_url(message):
     """
-    Returns a link if it matches the regex
+    Returns the first url in a message. If there aren't any returns None
     """
 
     answer = link_re.search(message)
