@@ -1,12 +1,11 @@
-#! /bin/env python
-
 import re
 
 link_re = re.compile("https?://\S+(\s|$)")
+yes_re = re.compile("(Yes|YES|yes)")
 
-def contains_a_link(message):
+def extract_url(message):
     """
-    Returns a link if it matches the regex
+    Returns the first url in a message. If there aren't any returns None
     """
 
     answer = link_re.search(message)
@@ -17,14 +16,8 @@ def contains_a_link(message):
     return answer
 
 
-yes_re = re.compile("(Yes|YES|yes)")
-
-def contains_a_yes(message):
+def has_a_yes(message):
     """
-    Returns a yes if it matches the regex
+    Returns True if it matches the yes regex
     """
-    answer = yes_re.search(message)
-    if answer is not None:
-        answer = answer.group(0).strip()
-
-    return answer
+    return yes_re.search(message) is not None
