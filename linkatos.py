@@ -2,7 +2,7 @@
 import os
 import time
 from slackclient import SlackClient
-import linkatos
+import linkatos.message as message
 
 
 # starterbot's ID as an environment variable
