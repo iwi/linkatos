@@ -20,6 +20,4 @@ def has_a_yes(message):
     """
     Returns True if it matches the yes regex
     """
-    found = yes_re.search(message) is not None
-
-    return found
+    return yes_re.search(message) is not None
