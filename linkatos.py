@@ -56,12 +56,11 @@ def parse_output(slack_rtm_output):
         for output in output_list:
             # when there is a message then get the channel
             if output and 'text' in output and output['user'] != BOT_ID:
-                finding = message.contains_a_link(output['text'])
+                finding = message.extract_url(output['text'])
                 if finding is not None:
                     output_type = 'link'
                 else:
-                    finding = message.contains_a_yes(output['text'])
-                    if finding is not None:
+                    if message.has_a_yes(output['text']):
                         output_type = 'yes'
 
             if output and 'channel' in output:

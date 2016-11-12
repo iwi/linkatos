@@ -18,10 +18,8 @@ def extract_url(message):
 
 def has_a_yes(message):
     """
-    Returns a yes if it matches the regex
+    Returns True if it matches the yes regex
     """
-    answer = yes_re.search(message)
-    if answer is not None:
-        answer = answer.group(0).strip()
+    found = yes_re.search(message) is not None
 
-    return answer
+    return found
