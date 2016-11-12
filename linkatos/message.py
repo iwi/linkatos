@@ -1,7 +1,7 @@
 import re
 
 link_re = re.compile("https?://\S+(\s|$)")
-yes_re = re.compile("(/b|^)(Yes|YES|yes)(/b|,|/.|$)")
+yes_re = re.compile("(\s|^)(Yes|YES|yes)(\s|[,.]|$)")
 
 def extract_url(message):
     """
