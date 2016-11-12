@@ -23,11 +23,11 @@ def test_is_not_a_url():
 
 # test yes detection
 
-def test_contains_a_yes():
+def test_found_a_yes():
 
     assert message.has_a_yes("foo yes bar") is True
 
 
-def test_is_not_a_yes():
+def test_not_found_a_yes():
 
     assert message.has_a_yes("foo yea bar") is False
