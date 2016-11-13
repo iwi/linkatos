@@ -10,10 +10,39 @@ This project intends to:
 
 ## Running the bot
 
-Currently the bot can only be run with:
-  ```sh
-  SLACK_BOT_TOKEN=apitoken BOT_ID=botid ./linkatos.py
-  ```
+To run the bot in isolation use the Dockerised version:
+
+First build the bot:
+
+```sh
+make build
+```
+
+Then
+
+```sh
+make install LINKATOS_SECRET=slacktoken LINKATOS_ID=botid
+```
+
+And, to stop the process and remove the Docker container:
+
+```sh
+make clean
+```
+
+
+If you run it outside Docker, first install the dependencies:
+
+```sh
+pip install -r requirements.txt
+```
+
+Then
+
+```sh
+SLACK_BOT_TOKEN=apitoken BOT_ID=botid ./linkatos.py
+```
+
 
 ## Tests
 
