@@ -17,11 +17,16 @@ Currently the bot can only be run with:
 
 ## Tests
 
-To run the tests you need to have Docker and Make installed. Then execute:
+To run the tests execute:
 
 ```sh
 make build test
 ```
+
+This has been tested with Docker (1.12.1) and GNU Make (4.1).
+These versions are the lowest that have been tested but lower versions might be
+acceptable as well.
+
 
 ## Tools
 
