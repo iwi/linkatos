@@ -28,7 +28,11 @@ typecheck:
 .PHONY: typecheck
 
 test:
+ifdef JUNIT
+	@$(DOCKER_TASK) $(image) ./test_runner.sh
+else
 	@$(DOCKER_TASK) $(image) py.test -v tests
+endif
 .PHONY: test
 
 shell:

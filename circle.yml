@@ -12,4 +12,4 @@ dependencies:
 test:
   override:
     - make typecheck
-    - make test
+    - make test JUNIT=true > $CIRCLE_TEST_REPORTS/junit.xml
