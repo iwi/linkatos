@@ -17,8 +17,11 @@ Currently the bot can only be run with:
 
 ## Tests
 
-Lorem ipsum
+To run the tests you need to have Docker and Make installed. Then execute:
 
+```sh
+make build test
+```
 
 ## Tools
 
@@ -30,10 +33,10 @@ The initial choices of tools are:
 
 ## Sources
 
-The slack bot was based on:
+The slack bot was initially based on:
 > A simple Python-powered starter Slack bot
 > [the tutorial](https://www.fullstackpython.com/blog/build-first-slack-bot-python.html)
 
 ## Licence
 
-See [LICENCE](https://github.com/iwi/linkatos/blob/master/LICENSE)
+See [LICENCE](https://github.com/iwi/linkatos/blob/master/LICENCE)
