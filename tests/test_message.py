@@ -1,7 +1,6 @@
 import pytest
 import linkatos.message as message
 
-
 # test link detection
 
 def test_message_has_a_https_url():
@@ -48,3 +47,70 @@ def test_message_with_beginning_of_word_Yes():
 
 def test_message_with_middle_of_word_yes():
     assert message.has_a_yes("reyesado") is False
+
+
+# test no detection
+
+def test_message_has_no_inbetween_spaces():
+    assert message.has_a_no("foo no bar") is True
+
+
+# test message parsing
+
+def test_ignore_linkatos_message():
+    output_example = [
+        {'user_profile': {'image_72':'image.png',
+                          'avatar_hash': 'hash',
+                          'real_name': '',
+                          'first_name': None,
+                          'name': 'name'},
+         'team': 'team',
+         'bot_id': 'bot_id',
+         'user': 'U2YJMEX2P',  # is it wrong to have this on a test?
+         'channel': 'channel',
+         'text': 'http://example.org',
+         'type': 'message',
+         'user_team': 'user_team'}
+    ]
+
+    assert (None, None, None) == parse_output(output_example)
+
+
+def test_is_of_url_type():
+    output_example = [
+        {'user_profile': {'image_72':'image.png',
+                          'avatar_hash': 'hash',
+                          'real_name': '',
+                          'first_name': None,
+                          'name': 'name'},
+         'team': 'team',
+         'bot_id': 'bot_id',
+         'user': 'user',
+         'channel': 'channel',
+         'text': 'http://example.org',
+         'type': 'message',
+         'user_team': 'user_team'}
+    ]
+
+    assert ("http://example.org", 'channel', 'url') == parse_output(output_example)
+
+
+def test_is_of_ynanswer_type():
+    output_example = [
+        {'user_profile': {'image_72':'image.png',
+                          'avatar_hash': 'hash',
+                          'real_name': '',
+                          'first_name': None,
+                          'name': 'name'},
+         'team': 'team',
+         'bot_id': 'bot_id',
+         'user': 'user',
+         'channel': 'channel',
+         'text': 'yes',
+         'type': 'message',
+         'user_team': 'user_team'}
+    ]
+
+    assert ("yes", 'channel', 'yn_answer') == parse_output(output_example)
+
+
