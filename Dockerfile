@@ -14,5 +14,6 @@ RUN pip install -r requirements.txt
 COPY linkatos.py /usr/local/linkatos/
 COPY linkatos /usr/local/linkatos/linkatos
 COPY tests /usr/local/linkatos/tests
+COPY test_runner.sh /usr/local/linkatos/test_runner.sh
 
 CMD ["./linkatos.py"]
