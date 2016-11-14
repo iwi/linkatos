@@ -57,15 +57,18 @@ def parse_output(slack_rtm_output):
             return (None, None, None)
 
         text = output['text']
-        out = message.extract_url(text)
         out_type = None
+        out = None
+        url = message.extract_url(text)
 
-        if out is not None:
+        if url is not None:
             out_type = 'url'
+            out = url
         else:
-            out = message.has_a_yes(text)
-            if out is not False:
+            is_yes = message.has_a_yes(text)
+            if is_yes is True:
                 out_type = 'yn_answer'
+                out = is_yes
             else:
                 if message.has_a_no(text) is True:
                     out_type = 'yn_answer'
