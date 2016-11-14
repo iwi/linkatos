@@ -44,32 +44,35 @@ def parse_output(slack_rtm_output):
         someone posts a website link starting with httpS?//, a yes or a no
     """
     # default outcome
-    out = None
-    channel = None
-    out_type = None
 
     output_list = slack_rtm_output
     print(output_list)  # print the list of outputs to get them on screen
 
-    if output_list and len(output_list) > 0:
-        for output in output_list:
-            # when there is a message then get the channel
-            if output and 'text' in output and output['user'] != BOT_ID:
-                text = output['text']
-                out = message.extract_url(text)
-                if out is not None:
-                    out_type = 'url'
-                else:
-                    out = message.has_a_yes(text)
-                    if out is not False:
-                        out_type = 'yn_answer'
-                    else:
-                        if message.has_a_no(text) is True:
-                            out_type = 'yn_answer'
-                            out = False
+    if (output_list is None) or (len(output_list) == 0):
+        return (None, None, None)
 
-            if output and 'channel' in output:
-                channel = output['channel']
+    for output in output_list:
+        if output is None or 'text' not in output or output['user'] == BOT_ID:
+            print("output none or text not there or user bot")
+            return (None, None, None)
+
+        text = output['text']
+        out = message.extract_url(text)
+        out_type = None
+
+        if out is not None:
+            out_type = 'url'
+        else:
+            out = message.has_a_yes(text)
+            if out is not False:
+                out_type = 'yn_answer'
+            else:
+                if message.has_a_no(text) is True:
+                    out_type = 'yn_answer'
+                    out = False
+
+        if 'channel' in output:
+            channel = output['channel']
 
     return (out, channel, out_type)
 
