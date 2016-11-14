@@ -37,17 +37,16 @@ def store_link(link, channel):
 
     return None
 
-
 def parse_output(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
         this parsing function returns None unless
-        someone posts a website link starting with httpS?// or a yes
+        someone posts a website link starting with httpS?//, a yes or a no
     """
     # default outcome
-    finding = None
+    out = None
     channel = None
-    output_type = None
+    out_type = None
 
     output_list = slack_rtm_output
     print(output_list)  # print the list of outputs to get them on screen
@@ -56,17 +55,23 @@ def parse_output(slack_rtm_output):
         for output in output_list:
             # when there is a message then get the channel
             if output and 'text' in output and output['user'] != BOT_ID:
-                finding = message.extract_url(output['text'])
-                if finding is not None:
-                    output_type = 'link'
+                text = output['text']
+                out = message.extract_url(text)
+                if out is not None:
+                    out_type = 'url'
                 else:
-                    if message.has_a_yes(output['text']):
-                        output_type = 'yes'
+                    out = message.has_a_yes(text)
+                    if out is not False:
+                        out_type = 'yn_answer'
+                    else:
+                        if message.has_a_no(text) is True:
+                            out_type = 'yn_answer'
+                            out = False
 
             if output and 'channel' in output:
                 channel = output['channel']
 
-    return (finding, channel, output_type)
+    return (out, channel, out_type)
 
 
 if __name__ == '__main__':
@@ -75,30 +80,27 @@ if __name__ == '__main__':
     # verify linkatos connection
     if slack_client.rtm_connect():
         print("linkatos is connected and running!")
+        expecting_confirmation = False
 
         while True:
             print("linkatos is listening")
 
             # parse the messages. Get 'None' while they're empty
-            messages = slack_client.rtm_read()
-            (link, channel, output_type) = parse_output(messages)
+            (out, channel, out_type) = parse_output(slack_client.rtm_read())
 
-            # handle the command when it is a http address
-            if link is not None and output_type is 'link' and channel:
-                bot_says(channel, "Do you want me to store the link " +
-                         link + " for you?")
-
-                # parse answerif answer...
-                messages = slack_client.rtm_read()
-                (answer, channel, output_type) = parse_output(messages)
-                print(answer)
-
-                # just to debug
-                if answer is not None:
-                    print("you said Yes")
-
-                # if response:
-                #     store_link(link)
+            # handle the command when it is a url
+            if out is not None  and channel:
+                if expecting_confirmation is False and out_type is 'url':
+                    url = out
+                    expecting_confirmation = True
+                    bot_says(channel, "Do you want me to store the link " +
+                         url + " for you?")
+                elif expecting_confirmation is True and out_type is 'yn_answer':
+                    is_yes = out
+                    expecting_confirmation = False
+                    if is_yes is True:
+                        # store_url(link) # function not yet ready
+                        bot_says(channel, url + " has been stored")
 
             time.sleep(READ_WEBSOCKET_DELAY)
 
