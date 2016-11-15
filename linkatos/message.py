@@ -36,8 +36,12 @@ def has_a_no(message):
 def parse(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
-        this parsing function returns None unless
-        someone posts a website link starting with httpS?//, a yes or a no
+        this parsing function returns None unless:
+        1. someone posts a url starting with httpS?//
+           in this case it returns the url and a out_type = 'url'
+        2. a yes or a no after a url
+           in this case it returns True for a yes, False for a no
+        The function also extracts the name of the channel
     """
     # default outcome
 
@@ -62,6 +66,7 @@ def parse(slack_rtm_output):
             out = url
         else:
             is_yes = has_a_yes(text)
+
             if is_yes is True:
                 out_type = 'yn_answer'
                 out = is_yes
