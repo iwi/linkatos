@@ -68,7 +68,7 @@ def parse(slack_rtm_output):
         else:
             has_yes = has_a_yes(text)
 
-            if is_yes is True:
+            if has_yes is True:
                 out_type = 'yn_answer'
                 out = has_yes
             else:
