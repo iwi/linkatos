@@ -33,6 +33,7 @@ def has_a_no(message):
     """
     return no_re.search(message) is not None
 
+
 def parse(slack_rtm_output):
     """
         The Slack Real Time Messaging API is an events firehose.
@@ -79,4 +80,3 @@ def parse(slack_rtm_output):
             channel = output['channel']
 
     return (out, channel, out_type)
-

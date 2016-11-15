@@ -63,7 +63,7 @@ def test_message_has_no_inbetween_spaces():
 
 def test_ignore_linkatos_message():
     output_example = [
-        {'user_profile': {'image_72':'image.png',
+        {'user_profile': {'image_72': 'image.png',
                           'avatar_hash': 'hash',
                           'real_name': '',
                           'first_name': None,
@@ -83,7 +83,7 @@ def test_ignore_linkatos_message():
 
 def test_is_of_url_type():
     output_example = [
-        {'user_profile': {'image_72':'image.png',
+        {'user_profile': {'image_72': 'image.png',
                           'avatar_hash': 'hash',
                           'real_name': '',
                           'first_name': None,
@@ -102,7 +102,7 @@ def test_is_of_url_type():
 
 def test_is_of_ynanswer_type_yes():
     output_example = [
-        {'user_profile': {'image_72':'image.png',
+        {'user_profile': {'image_72': 'image.png',
                           'avatar_hash': 'hash',
                           'real_name': '',
                           'first_name': None,
@@ -121,7 +121,7 @@ def test_is_of_ynanswer_type_yes():
 
 def test_is_of_ynanswer_type_no():
     output_example = [
-        {'user_profile': {'image_72':'image.png',
+        {'user_profile': {'image_72': 'image.png',
                           'avatar_hash': 'hash',
                           'real_name': '',
                           'first_name': None,
@@ -140,7 +140,7 @@ def test_is_of_ynanswer_type_no():
 
 def test_channelin_channelout():
     output_example = [
-        {'user_profile': {'image_72':'image.png',
+        {'user_profile': {'image_72': 'image.png',
                           'avatar_hash': 'hash',
                           'real_name': '',
                           'first_name': None,
@@ -155,5 +155,3 @@ def test_channelin_channelout():
     ]
 
     assert (True, 'channel_in', 'yn_answer') == message.parse(output_example)
-
-

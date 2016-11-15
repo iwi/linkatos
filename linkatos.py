@@ -52,13 +52,13 @@ if __name__ == '__main__':
             # parse the messages. Get 'None' while they're empty
             (out, channel, out_type) = message.parse(slack_client.rtm_read())
 
-            # handle the command when it is a url
-            if out is not None  and channel:
+            # handle the command either expecting a url or a yn_answer
+            if out is not None and channel:
                 if expecting_confirmation is False and out_type is 'url':
                     url = out
                     expecting_confirmation = True
                     bot_says(channel, "Do you want me to store the link " +
-                         url + " for you?")
+                             url + " for you?")
                 elif expecting_confirmation is True and out_type is 'yn_answer':
                     is_yes = out
                     expecting_confirmation = False
