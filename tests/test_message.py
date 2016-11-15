@@ -1,5 +1,9 @@
 import pytest
 import linkatos.message as message
+import os
+
+BOT_ID = os.environ.get("BOT_ID")
+
 
 # test link detection
 
@@ -72,6 +76,7 @@ def test_ignore_linkatos_message():
          'type': 'message',
          'user_team': 'user_team'}
     ]
+    output_example[0] = BOT_ID
 
     assert (None, None, None) == message.parse(output_example)
 
@@ -95,7 +100,7 @@ def test_is_of_url_type():
     assert ("http://example.org", 'channel', 'url') == message.parse(output_example)
 
 
-def test_is_of_ynanswer_type():
+def test_is_of_ynanswer_type_yes():
     output_example = [
         {'user_profile': {'image_72':'image.png',
                           'avatar_hash': 'hash',
@@ -112,5 +117,43 @@ def test_is_of_ynanswer_type():
     ]
 
     assert (True, 'channel', 'yn_answer') == message.parse(output_example)
+
+
+def test_is_of_ynanswer_type_no():
+    output_example = [
+        {'user_profile': {'image_72':'image.png',
+                          'avatar_hash': 'hash',
+                          'real_name': '',
+                          'first_name': None,
+                          'name': 'name'},
+         'team': 'team',
+         'bot_id': 'bot_id',
+         'user': 'user',
+         'channel': 'channel',
+         'text': 'No',
+         'type': 'message',
+         'user_team': 'user_team'}
+    ]
+
+    assert (False, 'channel', 'yn_answer') == message.parse(output_example)
+
+
+def test_channelin_channelout():
+    output_example = [
+        {'user_profile': {'image_72':'image.png',
+                          'avatar_hash': 'hash',
+                          'real_name': '',
+                          'first_name': None,
+                          'name': 'name'},
+         'team': 'team',
+         'bot_id': 'bot_id',
+         'user': 'user',
+         'channel': 'channel_in',
+         'text': 'yes',
+         'type': 'message',
+         'user_team': 'user_team'}
+    ]
+
+    assert (True, 'channel_in', 'yn_answer') == message.parse(output_example)
 
 

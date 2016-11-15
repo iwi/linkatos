@@ -80,4 +80,3 @@ def parse(slack_rtm_output):
 
     return (out, channel, out_type)
 
-
