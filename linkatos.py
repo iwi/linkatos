@@ -37,48 +37,6 @@ def store_link(link, channel):
 
     return None
 
-def parse_output(slack_rtm_output):
-    """
-        The Slack Real Time Messaging API is an events firehose.
-        this parsing function returns None unless
-        someone posts a website link starting with httpS?//, a yes or a no
-    """
-    # default outcome
-
-    output_list = slack_rtm_output
-    print(output_list)  # print the list of outputs to get them on screen
-
-    if (output_list is None) or (len(output_list) == 0):
-        return (None, None, None)
-
-    for output in output_list:
-        if output is None or 'text' not in output or output['user'] == BOT_ID:
-            print("output none or text not there or user bot")
-            return (None, None, None)
-
-        text = output['text']
-        out_type = None
-        out = None
-        url = message.extract_url(text)
-
-        if url is not None:
-            out_type = 'url'
-            out = url
-        else:
-            is_yes = message.has_a_yes(text)
-            if is_yes is True:
-                out_type = 'yn_answer'
-                out = is_yes
-            else:
-                if message.has_a_no(text) is True:
-                    out_type = 'yn_answer'
-                    out = False
-
-        if 'channel' in output:
-            channel = output['channel']
-
-    return (out, channel, out_type)
-
 
 if __name__ == '__main__':
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
@@ -92,7 +50,7 @@ if __name__ == '__main__':
             print("linkatos is listening")
 
             # parse the messages. Get 'None' while they're empty
-            (out, channel, out_type) = parse_output(slack_client.rtm_read())
+            (out, channel, out_type) = message.parse(slack_client.rtm_read())
 
             # handle the command when it is a url
             if out is not None  and channel:
