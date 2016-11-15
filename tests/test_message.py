@@ -66,14 +66,14 @@ def test_ignore_linkatos_message():
                           'name': 'name'},
          'team': 'team',
          'bot_id': 'bot_id',
-         'user': 'U2YJMEX2P',  # is it wrong to have this on a test?
+         'user': 'bot_id',  # is it wrong to have this on a test?
          'channel': 'channel',
          'text': 'http://example.org',
          'type': 'message',
          'user_team': 'user_team'}
     ]
 
-    assert (None, None, None) == parse_output(output_example)
+    assert (None, None, None) == message.parse(output_example)
 
 
 def test_is_of_url_type():
@@ -92,7 +92,7 @@ def test_is_of_url_type():
          'user_team': 'user_team'}
     ]
 
-    assert ("http://example.org", 'channel', 'url') == parse_output(output_example)
+    assert ("http://example.org", 'channel', 'url') == message.parse(output_example)
 
 
 def test_is_of_ynanswer_type():
@@ -111,6 +111,6 @@ def test_is_of_ynanswer_type():
          'user_team': 'user_team'}
     ]
 
-    assert ("yes", 'channel', 'yn_answer') == parse_output(output_example)
+    assert (True, 'channel', 'yn_answer') == message.parse(output_example)
 
 
