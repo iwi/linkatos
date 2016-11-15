@@ -65,11 +65,11 @@ def parse(slack_rtm_output):
             out_type = 'url'
             out = url
         else:
-            is_yes = has_a_yes(text)
+            has_yes = has_a_yes(text)
 
             if is_yes is True:
                 out_type = 'yn_answer'
-                out = is_yes
+                out = has_yes
             else:
                 if has_a_no(text) is True:
                     out_type = 'yn_answer'
