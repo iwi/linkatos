@@ -5,6 +5,7 @@ from slackclient import SlackClient
 import linkatos.parser as parser
 import linkatos.confirmation as confirmation
 import linkatos.printer as printer
+import linkatos.utils as utils
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -12,6 +13,7 @@ SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 
 # instantiate Slack clients
 slack_client = SlackClient(SLACK_BOT_TOKEN)
+
 
 def store_link(link, channel):
     """
@@ -28,7 +30,12 @@ def store_link(link, channel):
 
     printer.bot_says(channel, message)
 
+# if is_yes is True:
+#     # store_url(link) # function not yet ready
+#     printer.bot_says(channel, url + " has been stored", slack_client)
+
     return None
+
 
 # Main
 if __name__ == '__main__':
@@ -46,16 +53,30 @@ if __name__ == '__main__':
             # @out_type
             parsed_message = parser.parse(slack_client.rtm_read(), BOT_ID)
 
+            url = utils.temp_keep_url(expecting_confirmation, parsed_message)
+
+            print(url)
+
+            printer.ask_confirmation(expecting_confirmation, parsed_message,
+                                     slack_client)
+
             # update expecting_confirmation
             # when it's a url
             expecting_confirmation = confirmation.update_confirmation_if_url(
+                parsed_message,
+                expecting_confirmation)
+
+            print(expecting_confirmation)
+
+            # Check if there is an answer
+            (expecting_confirmation, is_yes) = confirmation.process_confirmation_if_yn(
                                                     parsed_message,
                                                     expecting_confirmation)
 
-            # when it's the answer after a url
-            expecting_confirmation = confirm.process_confirmation_if_yn(
-                                                    parsed_message,
-                                                    expecting_confirmation)
+            # printer.notify_confirmation(expecting_confirmation, is_yes)
+
+            # Store url
+            # store_url(expecting_confirmation, url, is_yes)
 
             time.sleep(READ_WEBSOCKET_DELAY)
 

@@ -1,8 +1,8 @@
 import pytest
 import linkatos.utils as utils
 
-# test yes detection
 
+# test yes detection
 def test_message_with_yes_between_spaces():
     assert utils.has_a_yes("foo yes bar") is True
 
@@ -38,25 +38,34 @@ def test_message_has_no_inbetween_spaces():
 
 # test message from bot
 def test_from_bot():
-    input_message = [
-        {'bot_id': 'bot_id'
-    }]
+    input_message = {
+        'user': 'bot_id'
+    }
 
-    assert utils.from_bot(message, 'bot_id') is True
+    assert utils.from_bot(input_message, 'bot_id') is True
 
 
 # test message contents
 def test_has_text():
-    input_message = [
-        {'text': 'sample text'
-    }]
+    input_message = {
+        'text': 'sample text',
+        'channel': 'channel'
+    }
 
     assert utils.has_text(input_message) is True
 
 
 def test_has_channel():
-    input_message = [
-        {'channel': 'example'
-    }]
+    input_message = {
+        'channel': 'example'
+    }
 
-    assert utils.has_channel('channel' in message) is True
+    assert utils.has_channel(input_message) is True
+
+
+# test keep url
+def test_out_url_and_type_url():
+    parsed_message = {'out': 'https://example', 'channel': 'ch', 'type': 'url'}
+    expecting_confirmation = True
+
+    assert utils.temp_keep_url(expecting_confirmation, parsed_message) == 'https://example'

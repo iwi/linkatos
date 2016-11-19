@@ -30,3 +30,10 @@ def has_channel(message):
     return ('channel' in message)
 
 
+def is_fresh_url(expecting_confirmation, message_type):
+    return (not expecting_confirmation) and message_type is 'url'
+
+
+def temp_keep_url(expecting_confirmation, parsed_message):
+    if expecting_confirmation and parsed_message['type'] == 'url':
+        return (parsed_message['out'])

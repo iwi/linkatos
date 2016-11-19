@@ -1,9 +1,10 @@
 import linkatos.message as message
 import linkatos.utils
+import linkatos.utils as utils
 
 
 def is_empty(message_list):
-     return ((message_list is None) or (len(message_list) == 0))
+    return ((message_list is None) or (len(message_list) == 0))
 
 
 def parse(input_message, BOT_ID):
@@ -19,34 +20,35 @@ def parse(input_message, BOT_ID):
     print(input_message)  # print the list of outputs to get them on screen
 
     # default outcome
-    output = {'out': None, 'channel' : None, 'type' : None})
+    parsed = {'out': None, 'channel': None, 'type': None}
 
     if is_empty(input_message):
-        return (output)  # empty output
+        return (parsed)  # empty output
 
-    for message in input_message:
-        if from_bot(message, BOT_ID) or not has_text(message) or not
-            has_channel(message):
-            return (output)  # empty output
+    for sub_message in input_message:
+        if not utils.has_text(sub_message) or \
+           not utils.has_channel(sub_message) or \
+           utils.from_bot(sub_message, BOT_ID):
+            return (parsed)  # empty output
 
-        output['channel'] = input_message['channel']
+        parsed['channel'] = sub_message['channel']
 
-        text = input_message['text']
-        output['out'] = extract_url(text)
+        text = sub_message['text']
+        parsed['out'] = message.extract_url(text)
 
-        if output['out'] is not None:
-            output['type'] = 'url'
-            return (output)  # url output
+        if parsed['out'] is not None:
+            parsed['type'] = 'url'
+            return (parsed)  # url output
         else:
-            output['out'] = has_a_yes(text)
+            parsed['out'] = utils.has_a_yes(text)
 
-            if output['out'] is True:
-                output['type'] = 'yn_answer'
-                return (output)  # True y/n answer
+            if parsed['out'] is True:
+                parsed['type'] = 'yn_answer'
+                return (parsed)  # True y/n answer
             else:
-                if has_a_no(text) is True:
-                    output['type'] = 'yn_answer'
-                    output['out'] = False
-                    return (output)  # False y/n answer
+                if utils.has_a_no(text) is True:
+                    parsed['type'] = 'yn_answer'
+                    parsed['out'] = False
+                    return (parsed)  # False y/n answer
 
-    return (output)
+    return (parsed)

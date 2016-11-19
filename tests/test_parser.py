@@ -1,63 +1,63 @@
 import pytest
 import linkatos.parser as parser
 
-# test message parsing
 
+# test message parsing
 def test_ignore_linkatos_message():
-    output_example = [{
-        'bot_id': 'bot_id',
+    input_example = [{
+        'user': 'bot_id',
         'channel': 'channel',
         'text': 'http://example.org'
     }]
 
+    output = {'out': None, 'channel': None, 'type': None}
 
-    output = {'out': None, 'channel' : None, 'type' : None})
+    assert parser.parse(input_example, 'bot_id') == output
 
-    assert parser.parse(message, 'bot_id') is output
 
 def test_is_of_url_type():
-    output_example = [{
+    input_example = [{
          'channel': 'channel',
          'text': 'http://example.org',
+         'user': 'user'
     }]
 
-    output = {'out': 'http://example.org', 'channel' : 'channel', 'type' :
-        'url'})
+    output = {'out': 'http://example.org', 'channel': 'channel', 'type': 'url'}
 
-    assert parser.parse(message, 'bot_id') is output
+    assert parser.parse(input_example, 'bot_id') == output
 
 
 def test_is_of_ynanswer_type_yes():
-    output_example = [{
+    input_example = [{
          'channel': 'channel',
          'text': 'yes',
+         'user': 'user'
     }]
 
-    output = {'out': True, 'channel' : 'channel', 'type' :
-        'yn_answer'})
+    output = {'out': True, 'channel': 'channel', 'type': 'yn_answer'}
 
-    assert parser.parse(message, 'bot_id') is output
+    assert parser.parse(input_example, 'bot_id') == output
 
 
 def test_is_of_ynanswer_type_no():
-    output_example = [{
+    input_example = [{
          'channel': 'channel',
          'text': 'No',
+         'user': 'user'
     }]
 
-    output = {'out': False, 'channel' : 'channel', 'type' :
-        'yn_answer'})
+    output = {'out': False, 'channel': 'channel', 'type': 'yn_answer'}
 
-    assert parser.parse(message, 'bot_id') is output
+    assert parser.parse(input_example, 'bot_id') == output
 
 
 def test_channelin_channelout():
-    output_example = [{
+    input_example = [{
          'channel': 'channel_in',
          'text': 'yes',
+         'user': 'user'
     }]
 
-    output = {'out': True, 'channel' : 'channel_in', 'type' :
-        'yn_answer'})
+    output = {'out': True, 'channel': 'channel_in', 'type': 'yn_answer'}
 
-    assert parser.parse(message, 'bot_id') is output
+    assert parser.parse(input_example, 'bot_id') == output
