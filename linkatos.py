@@ -2,8 +2,9 @@
 import os
 import time
 from slackclient import SlackClient
-import linkatos.message as message
-
+import linkatos.parser as parser
+import linkatos.confirmation as confirmation
+import linkatos.printer as printer
 
 # starterbot's ID as an environment variable
 BOT_ID = os.environ.get("BOT_ID")
@@ -11,14 +12,6 @@ SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 
 # instantiate Slack clients
 slack_client = SlackClient(SLACK_BOT_TOKEN)
-
-
-def bot_says(channel, text):
-    return slack_client.api_call("chat.postMessage",
-                                 channel=channel,
-                                 text=text,
-                                 as_user=True)
-
 
 def store_link(link, channel):
     """
@@ -33,11 +26,11 @@ def store_link(link, channel):
     if error:
         message = "ERROR: the link could not be stored"
 
-    bot_says(channel, message)
+    printer.bot_says(channel, message)
 
     return None
 
-
+# Main
 if __name__ == '__main__':
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
 
@@ -49,22 +42,20 @@ if __name__ == '__main__':
         while True:
             print("linkatos is listening")
 
-            # parse the messages. Get 'None' while they're empty
-            (out, channel, out_type) = message.parse(slack_client.rtm_read())
+            # parse the messages. Get a dictionary with @out, @channel,
+            # @out_type
+            parsed_message = parser.parse(slack_client.rtm_read(), BOT_ID)
 
-            # handle the command either expecting a url or a yn_answer
-            if out is not None and channel:
-                if expecting_confirmation is False and out_type is 'url':
-                    url = out
-                    expecting_confirmation = True
-                    bot_says(channel, "Do you want me to store the link " +
-                             url + " for you?")
-                elif expecting_confirmation is True and out_type is 'yn_answer':
-                    is_yes = out
-                    expecting_confirmation = False
-                    if is_yes is True:
-                        # store_url(link) # function not yet ready
-                        bot_says(channel, url + " has been stored")
+            # update expecting_confirmation
+            # when it's a url
+            expecting_confirmation = confirmation.update_confirmation_if_url(
+                                                    parsed_message,
+                                                    expecting_confirmation)
+
+            # when it's the answer after a url
+            expecting_confirmation = confirm.process_confirmation_if_yn(
+                                                    parsed_message,
+                                                    expecting_confirmation)
 
             time.sleep(READ_WEBSOCKET_DELAY)
 
