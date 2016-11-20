@@ -20,6 +20,10 @@ clean:
 	docker rm -vf $(id)
 .PHONY: clean
 
+logs:
+	docker logs -f $(id)
+.PHONY: logs
+
 
 typecheck: FILE_LIST = $(filter-out %/utils.py, $(wildcard linkatos/*.py))
 typecheck: EXTRA_FLAGS = $(if $(VERBOSE), --stats)
