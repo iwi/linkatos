@@ -13,7 +13,6 @@ def compose_question(url):
 
 
 def ask_confirmation(expecting_confirmation, parsed_message, slack_client):
-    print('asking')
     if is_fresh_url(expecting_confirmation, parsed_message['type']):
         bot_says(parsed_message['channel'],
                  compose_question(parsed_message['out']),
