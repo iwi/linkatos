@@ -61,11 +61,3 @@ def test_has_channel():
     }
 
     assert utils.has_channel(input_message) is True
-
-
-# test keep url
-def test_out_url_and_type_url():
-    parsed_message = {'out': 'https://example', 'channel': 'ch', 'type': 'url'}
-    expecting_confirmation = True
-
-    assert utils.temp_keep_url(expecting_confirmation, parsed_message) == 'https://example'

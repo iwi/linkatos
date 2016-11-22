@@ -23,15 +23,18 @@ if __name__ == '__main__':
     if slack_client.rtm_connect():
         print("linkatos is connected and running!")
         expecting_confirmation = False
+        url = None
 
         while True:
-            print("linkatos is listening")
-
             # parse the messages. Get a dictionary with @out, @channel,
             # @out_type
             parsed_message = parser.parse(slack_client.rtm_read(), BOT_ID)
 
-            url = utils.temp_keep_url(expecting_confirmation, parsed_message)
+            print(parsed_message)
+            print(expecting_confirmation)
+
+            if utils.is_fresh_url(expecting_confirmation, parsed_message['type']):
+                url = parsed_message['out']
 
             print(url)
 
@@ -43,8 +46,6 @@ if __name__ == '__main__':
             expecting_confirmation = confirmation.update_confirmation_if_url(
                 parsed_message,
                 expecting_confirmation)
-
-            print(expecting_confirmation)
 
             # Check if there is an answer
             (expecting_confirmation, is_yes) = confirmation.process_confirmation_if_yn(
