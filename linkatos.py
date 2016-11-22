@@ -15,28 +15,6 @@ SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 
-def store_link(link, channel):
-    """
-     ------------------- INACTIVE FUNCTION
-        Receives a link.
-        Stores it in the db.
-        Sends a confirmation message.
-    """
-    error = db.store(link)
-    message = "Success! The link has been stored"
-
-    if error:
-        message = "ERROR: the link could not be stored"
-
-    printer.bot_says(channel, message)
-
-# if is_yes is True:
-#     # store_url(link) # function not yet ready
-#     printer.bot_says(channel, url + " has been stored", slack_client)
-
-    return None
-
-
 # Main
 if __name__ == '__main__':
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
