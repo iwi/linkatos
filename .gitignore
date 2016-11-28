@@ -6,3 +6,4 @@ info.md
 __pycache__
 build
 dist
+**.json
