@@ -21,8 +21,7 @@ make build
 Then
 
 ```sh
-make install LINKATOS_SECRET=slacktoken LINKATOS_ID=botid
-FB_API_KEY=firebase_api_key FB_USER=firebase_user FB_PASS="firebase_password"
+make install LINKATOS_SECRET=slacktoken LINKATOS_ID=botid FB_API_KEY=firebase_api_key FB_USER=firebase_user FB_PASS="firebase_password"
 ```
 
 And, to stop the process and remove the Docker container:
@@ -41,7 +40,7 @@ pip install -r requirements.txt
 Then
 
 ```sh
-SLACK_BOT_TOKEN=apitoken BOT_ID=botid ./linkatos.py
+SLACK_BOT_TOKEN=apitoken BOT_ID=botid FB_API_KEY=firebase_api_key FB_USER=firebase_user FB_PASS="firebase_password" ./linkatos.py
 ```
 
 
