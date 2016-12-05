@@ -20,6 +20,7 @@ FB_PASS = os.environ.get("FB_PASS")
 # instantiate Slack clients
 slack_client = SlackClient(SLACK_BOT_TOKEN)
 
+
 def keep_wanted_urls(expecting_confirmation, url):
     # parse the messages. Get a dictionary with @out, @channel,
     # @out_type
@@ -52,10 +53,10 @@ def keep_wanted_urls(expecting_confirmation, url):
     # Store url
     is_yes = firebase.store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS)
 
-
     time.sleep(READ_WEBSOCKET_DELAY)
 
     return (expecting_confirmation, url)
+
 
 # Main
 if __name__ == '__main__':
