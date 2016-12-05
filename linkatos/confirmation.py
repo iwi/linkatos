@@ -10,9 +10,11 @@ def update_confirmation_if_url(parsed_message, expecting_confirmation):
 
 
 def process_confirmation_if_yn(parsed_message, expecting_confirmation):
-    is_yes = None
-    if expecting_confirmation is True and parsed_message['type'] is 'yn_answer':
-        is_yes = parsed_message['out']
-        expecting_confirmation = False
+    if expecting_confirmation is False or parsed_message['type'] is not 'yn_answer':
+        is_yes = False
+        return (expecting_confirmation, is_yes)
+
+    is_yes = parsed_message['out']  # True if 'yes', False if 'no'
+    expecting_confirmation = False
 
     return (expecting_confirmation, is_yes)
