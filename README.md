@@ -22,6 +22,7 @@ Then
 
 ```sh
 make install LINKATOS_SECRET=slacktoken LINKATOS_ID=botid
+FB_API_KEY=firebase_api_key FB_USER=firebase_user FB_PASS="firebase_password"
 ```
 
 And, to stop the process and remove the Docker container:
