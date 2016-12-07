@@ -2,23 +2,33 @@
 import os
 import time
 from slackclient import SlackClient
+import pyrebase
 import linkatos.parser as parser
 import linkatos.confirmation as confirmation
 import linkatos.printer as printer
 import linkatos.utils as utils
-import linkatos.firebase as firebase
+import linkatos.firebase as fb
 
 # starterbot environment variables
 BOT_ID = os.environ.get("BOT_ID")
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
+
+# instantiate Slack clients
+slack_client = SlackClient(SLACK_BOT_TOKEN)
 
 # firebase environment variables
 FB_API_KEY = os.environ.get("FB_API_KEY")
 FB_USER = os.environ.get("FB_USER")
 FB_PASS = os.environ.get("FB_PASS")
 
-# instantiate Slack clients
-slack_client = SlackClient(SLACK_BOT_TOKEN)
+# initialise firebase
+config = {
+    "apiKey": FB_API_KEY,
+    "authDomain": "coses-acbe6.firebaseapp.com",
+    "databaseURL": "https://coses-acbe6.firebaseio.com",
+    "storageBucket": "coses-acbe6.appspot.com"}
+
+firebase = pyrebase.initialize_app(config)
 
 
 def keep_wanted_urls(expecting_confirmation, url):
@@ -51,7 +61,8 @@ def keep_wanted_urls(expecting_confirmation, url):
     # printer.notify_confirmation(expecting_confirmation, is_yes)
 
     # Store url
-    is_yes = firebase.store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS)
+    is_yes = fb.store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS,
+                                firebase)
 
     time.sleep(READ_WEBSOCKET_DELAY)
 
