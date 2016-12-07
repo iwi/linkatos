@@ -3,7 +3,7 @@ import pyrebase
 
 def store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS):
     # do nothing if it's unnecessary
-    if is_yes is False:
+    if not is_yes:
         return is_yes
 
     # connect to firebase
