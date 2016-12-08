@@ -22,7 +22,8 @@ FB_USER = os.environ.get("FB_USER")
 FB_PASS = os.environ.get("FB_PASS")
 
 # initialise firebase
-firebase = fb.initialise(FB_API_KEY)
+project_name = 'coses-acbe6'
+firebase = fb.initialise(FB_API_KEY, project_name)
 
 
 def keep_wanted_urls(expecting_confirmation, url):

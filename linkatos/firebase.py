@@ -1,12 +1,13 @@
 import pyrebase
 
 
-def initialise(FB_API_KEY):
+def initialise(FB_API_KEY, project_name):
     config = {
-        "apiKey": FB_API_KEY,
-        "authDomain": "coses-acbe6.firebaseapp.com",
-        "databaseURL": "https://coses-acbe6.firebaseio.com",
-        "storageBucket": "coses-acbe6.appspot.com"}
+      "apiKey": FB_API_KEY,
+      "authDomain": "{}.firebaseapp.com".format(project_name),
+      "databaseURL": "https://{}.firebaseio.com".format(project_name),
+      "storageBucket": "{}.appspot.com".format(project_name),
+    }
 
     return pyrebase.initialize_app(config)
 
