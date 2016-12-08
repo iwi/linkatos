@@ -9,7 +9,7 @@ def configure_connection(FB_API_KEY):
 
     return (config)
 
-def store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS, firebase):
+def store_url(is_yes, url, FB_USER, FB_PASS, firebase):
     # do nothing if it's unnecessary
     if not is_yes:
         return is_yes

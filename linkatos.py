@@ -23,12 +23,6 @@ FB_PASS = os.environ.get("FB_PASS")
 
 # initialise firebase
 config = fb.configure_connection(FB_API_KEY)
-config = {
-    "apiKey": FB_API_KEY,
-    "authDomain": "coses-acbe6.firebaseapp.com",
-    "databaseURL": "https://coses-acbe6.firebaseio.com",
-    "storageBucket": "coses-acbe6.appspot.com"}
-
 firebase = pyrebase.initialize_app(config)
 
 
@@ -62,8 +56,7 @@ def keep_wanted_urls(expecting_confirmation, url):
     # printer.notify_confirmation(expecting_confirmation, is_yes)
 
     # Store url
-    is_yes = fb.store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS,
-                                firebase)
+    is_yes = fb.store_url(is_yes, url, FB_USER, FB_PASS, firebase)
 
     time.sleep(READ_WEBSOCKET_DELAY)
 
