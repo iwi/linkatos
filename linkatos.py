@@ -69,7 +69,6 @@ if __name__ == '__main__':
 
     # verify linkatos connection
     if slack_client.rtm_connect():
-        print("linkatos is connected and running!")
         expecting_confirmation = False
         url = None
 
