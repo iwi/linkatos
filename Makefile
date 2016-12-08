@@ -13,6 +13,9 @@ install:
 	docker run -d --name $(id) \
              --env SLACK_BOT_TOKEN=$(LINKATOS_SECRET) \
              --env BOT_ID=$(LINKATOS_ID) \
+             --env FB_API_KEY=$(FB_API_KEY) \
+             --env FB_USER=$(FB_USER) \
+             --env FB_PASS=$(FB_PASS) \
              $(image)
 .PHONY: install
 

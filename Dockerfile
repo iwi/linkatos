@@ -3,7 +3,13 @@ FROM python:3.5-slim
 ENV LANG en_US.UTF-8
 ENV LC_ALL C.UTF-8
 
-RUN pip install --upgrade pip
+RUN apt-get update -qq \
+ && apt-get install -qqy \
+       gcc \
+ && apt-get autoclean \
+ && apt-get clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+ && pip install --upgrade pip
 
 COPY requirements.txt /usr/local/linkatos/requirements.txt
 

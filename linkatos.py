@@ -2,17 +2,29 @@
 import os
 import time
 from slackclient import SlackClient
+import pyrebase
 import linkatos.parser as parser
 import linkatos.confirmation as confirmation
 import linkatos.printer as printer
 import linkatos.utils as utils
+import linkatos.firebase as fb
 
-# starterbot's ID as an environment variable
+# starterbot environment variables
 BOT_ID = os.environ.get("BOT_ID")
 SLACK_BOT_TOKEN = os.environ.get("SLACK_BOT_TOKEN")
 
 # instantiate Slack clients
 slack_client = SlackClient(SLACK_BOT_TOKEN)
+
+# firebase environment variables
+FB_API_KEY = os.environ.get("FB_API_KEY")
+FB_USER = os.environ.get("FB_USER")
+FB_PASS = os.environ.get("FB_PASS")
+
+# initialise firebase
+project_name = 'coses-acbe6'
+firebase = fb.initialise(FB_API_KEY, project_name)
+
 
 def keep_wanted_urls(expecting_confirmation, url):
     # parse the messages. Get a dictionary with @out, @channel,
@@ -36,7 +48,7 @@ def keep_wanted_urls(expecting_confirmation, url):
         parsed_message,
         expecting_confirmation)
 
-    # Check if there is an answer
+    # check if there is an answer
     (expecting_confirmation, is_yes) = confirmation.process_confirmation_if_yn(
                                             parsed_message,
                                             expecting_confirmation)
@@ -44,11 +56,12 @@ def keep_wanted_urls(expecting_confirmation, url):
     # printer.notify_confirmation(expecting_confirmation, is_yes)
 
     # Store url
-    # store_url(expecting_confirmation, url, is_yes)
+    is_yes = fb.store_url(is_yes, url, FB_USER, FB_PASS, firebase)
 
     time.sleep(READ_WEBSOCKET_DELAY)
 
     return (expecting_confirmation, url)
+
 
 # Main
 if __name__ == '__main__':
