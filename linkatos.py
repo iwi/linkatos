@@ -22,6 +22,7 @@ FB_USER = os.environ.get("FB_USER")
 FB_PASS = os.environ.get("FB_PASS")
 
 # initialise firebase
+config = fb.configure_connection(FB_API_KEY)
 config = {
     "apiKey": FB_API_KEY,
     "authDomain": "coses-acbe6.firebaseapp.com",

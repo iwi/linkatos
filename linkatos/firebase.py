@@ -1,5 +1,13 @@
 import pyrebase
 
+def configure_connection(FB_API_KEY):
+    config = {
+        "apiKey": FB_API_KEY,
+        "authDomain": "coses-acbe6.firebaseapp.com",
+        "databaseURL": "https://coses-acbe6.firebaseio.com",
+        "storageBucket": "coses-acbe6.appspot.com"}
+
+    return (config)
 
 def store_url(is_yes, url, FB_API_KEY, FB_USER, FB_PASS, firebase):
     # do nothing if it's unnecessary
