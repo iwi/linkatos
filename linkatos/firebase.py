@@ -12,7 +12,7 @@ def configure_connection(FB_API_KEY):
 def store_url(is_yes, url, FB_USER, FB_PASS, firebase):
     # do nothing if it's unnecessary
     if not is_yes:
-        return is_yes
+        return False
 
     # creates token every time maybe worth doing it once every 30m as they
     # expire every hour
@@ -26,6 +26,4 @@ def store_url(is_yes, url, FB_USER, FB_PASS, firebase):
 
     db.child("users").push(data, user['idToken'])
 
-    is_yes = False
-
-    return is_yes
+    return False
