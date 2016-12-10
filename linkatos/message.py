@@ -1,6 +1,6 @@
 import re
 
-link_re = re.compile("(\s|^)<(https?://[\w./?+]+)>(\s|$)")
+link_re = re.compile("(?:\s|^)<(https?://[\w./?+]+)>(?:\s|$)")
 
 
 def extract_url(message):
@@ -10,6 +10,6 @@ def extract_url(message):
     answer = link_re.search(message)
 
     if answer is not None:
-        answer = answer.group(2).strip()
+        answer = answer.group(1).strip()
 
     return answer
