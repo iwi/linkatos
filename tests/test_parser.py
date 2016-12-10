@@ -18,7 +18,7 @@ def test_ignore_linkatos_message():
 def test_is_of_url_type():
     input_example = [{
          'channel': 'channel',
-         'text': 'http://example.org',
+         'text': '<http://example.org>',
          'user': 'user'
     }]
 
