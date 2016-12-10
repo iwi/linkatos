@@ -39,19 +39,20 @@ def keep_wanted_urls(expecting_confirmation, url):
 
     print(url)
 
-    printer.ask_confirmation(expecting_confirmation, parsed_message,
-                             slack_client)
+    printer.ask_confirmation(expecting_confirmation, parsed_message, slack_client)
 
     # update expecting_confirmation
     # when it's a url
    expecting_confirmation = confirmation.update_if_url(
         parsed_message,
-        expecting_confirmation)
+        expecting_confirmation
+    )
 
     # check if there is an answer
     (expecting_confirmation, is_yes) = confirmation.process_if_yn(
-                                            parsed_message,
-                                            expecting_confirmation)
+        parsed_message,
+        expecting_confirmation
+    )
 
     # printer.notify_confirmation(expecting_confirmation, is_yes)
 
