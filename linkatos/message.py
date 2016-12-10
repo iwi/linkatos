@@ -1,6 +1,6 @@
 import re
 
-link_re = re.compile("(?:\s|^)<(https?://[\w./?+&+%$!#=]+)>(?:\s|$)")
+link_re = re.compile("(?:\s|^)<(https?://[\w./?+&+%$!#=\-_]+)>(?:\s|$)")
 
 
 def extract_url(message):
