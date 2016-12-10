@@ -22,20 +22,20 @@ def test_plus_in_url():
 
 
 def test_equal_in_url():
-    expected = "https://wikipedia.org/title=foo"
-    text = "<https://wikipedia.org/title=foo>"
+    expected = "http://example.org?q=foo"
+    text = "<http://example.org?q=foo>"
     assert message.extract_url(text) == expected
 
 
 def test_qmark_in_url():
-    expected = "http://wik.org/index.php?title"
-    text = "<http://wik.org/index.php?title>"
+    expected = "http://example.org?"
+    text = "<http://example.org?>"
     assert message.extract_url(text) == expected
 
 
 def test_and_in_url():
-    expected = "https://foo.org/alpha&beta"
-    text = "<https://foo.org/alpha&beta>"
+    expected = "http://example.org?foo=1&bar=2"
+    text = "<http://example.org?foo=1&bar=2>"
     assert message.extract_url(text) == expected
 
 
