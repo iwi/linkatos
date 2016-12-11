@@ -3,10 +3,6 @@ import os
 import time
 from slackclient import SlackClient
 import pyrebase
-import linkatos.parser as parser
-import linkatos.confirmation as confirmation
-import linkatos.printer as printer
-import linkatos.utils as utils
 import linkatos.firebase as fb
 
 # starterbot environment variables
