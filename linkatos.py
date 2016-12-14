@@ -31,6 +31,8 @@ if __name__ == '__main__':
         url = None
 
         while True:
+            # note that url is returned to keep it over several cylcles in
+            # whilst we wait for an answer
             (expecting_confirmation, url) = do.keep_wanted_urls(expecting_confirmation,
                                                                 url,
                                                                 slack_client,
