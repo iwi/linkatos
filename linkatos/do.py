@@ -5,6 +5,7 @@ import linkatos.printer as printer
 import linkatos.utils as utils
 import linkatos.firebase as fb
 
+
 def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
                      FB_USER, FB_PASS, firebase):
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
@@ -26,7 +27,7 @@ def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
     # update expecting_confirmation
     # when it's a url
     expecting_confirmation = confirmation.update_if_url(parsed_message,
-                                                       expecting_confirmation)
+                                                        expecting_confirmation)
 
     # check if there is an answer
     (expecting_confirmation, is_yes) = confirmation.process_if_yn(parsed_message,
