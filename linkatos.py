@@ -3,7 +3,7 @@ import os
 from slackclient import SlackClient
 import pyrebase
 import linkatos.firebase as fb
-import linkatos.do as do
+import linkatos.activities as activities
 
 # starterbot environment variables
 BOT_ID = os.environ.get("BOT_ID")
@@ -33,12 +33,13 @@ if __name__ == '__main__':
         while True:
             # note that url is returned to keep it over several cylcles in
             # whilst we wait for an answer
-            (expecting_confirmation, url) = do.keep_wanted_urls(expecting_confirmation,
-                                                                url,
-                                                                slack_client,
-                                                                BOT_ID,
-                                                                FB_USER,
-                                                                FB_PASS,
-                                                                firebase)
+            (expecting_confirmation, url) = activities.keep_wanted_urls(
+                                                expecting_confirmation,
+                                                url,
+                                                slack_client,
+                                                BOT_ID,
+                                                FB_USER,
+                                                FB_PASS,
+                                                firebase)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
