@@ -11,10 +11,9 @@ def initialise(api_key, project_name):
 
     return pyrebase.initialize_app(config)
 
-################################## user???????????????????
-def authenticate_user(user, password, firebase):
-    auth = firebase.auth()
-    user = auth.sign_in_with_email_and_password(user, password)
+
+def authenticate_user(username, password, auth):
+    user = auth.sign_in_with_email_and_password(username, password)
     return user
 
 
@@ -27,31 +26,22 @@ def get_token(user):
 
 
 def store_url(url, db, token):
-    return db.push(to_data(url), token)
+    return db.child("users").push(to_data(url), token)
+
+
+def get_auth(firebase):
+    return firebase.auth()
 
 
 def to_data(url):
     return {"url": url}
 
 
-
-def xxxxxxxxxx(is_yes, url, user, password, firebase):
-    # do nothing if it's unnecessary
-    if not is_yes:
-        return False
-
+def connect_to_fb_and_store_url(url, username, password, firebase):
+    # the function should only be called if we need to store the url
+    auth = get_auth(firebase)
+    user = authenticate_user(username, password, auth)
+    token = get_token(user)
+    data = to_data(url)
     db = get_db(firebase)
-    user = authenticate_user(user, password, firebase)
-    token = get_token(user, password, firebase)
-
-    # creates token every time maybe worth doing it once every 30m as they
-    # expire every hour
-
-    db = firebase.database()
-    data = {
-        "url": url
-    }
-
-    db.child("users").push(data, user['idToken'])
-
-    return False
+    store_url(url, db, token)
