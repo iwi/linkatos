@@ -1,4 +1,5 @@
 #! /usr/bin/env python
+
 import os
 from slackclient import SlackClient
 import pyrebase
@@ -16,6 +17,7 @@ slack_client = SlackClient(SLACK_BOT_TOKEN)
 FB_API_KEY = os.environ.get("FB_API_KEY")
 FB_USER = os.environ.get("FB_USER")
 FB_PASS = os.environ.get("FB_PASS")
+fb_credentials = {'username': FB_USER, 'password': FB_PASS}
 
 # initialise firebase
 project_name = 'coses-acbe6'
@@ -38,8 +40,7 @@ if __name__ == '__main__':
                                                 url,
                                                 slack_client,
                                                 BOT_ID,
-                                                FB_USER,
-                                                FB_PASS,
+                                                fb_credentials,
                                                 firebase)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
