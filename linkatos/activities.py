@@ -7,7 +7,7 @@ import linkatos.firebase as fb
 
 
 def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
-                     FB_USER, FB_PASS, firebase):
+                     fb_credentials, firebase):
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
 
     # parse the messages. Get a dictionary with @out, @channel,
@@ -37,7 +37,7 @@ def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
 
     # Store url
     if is_yes:
-        fb.connect_and_store_url(url, FB_USER, FB_PASS, firebase)
+        fb.connect_and_store_url(url, fb_credentials, firebase)
         is_yes = False
 
     time.sleep(READ_WEBSOCKET_DELAY)
