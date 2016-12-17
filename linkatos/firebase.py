@@ -17,22 +17,21 @@ def authenticate(username, password, auth):
     return user
 
 
-def get_token(user):
+def get_token(username, password, firebase):
+    user = authenticate(username, password, firebase.auth())
     return user['idToken']
-
-
-def store_url(url, db, token):
-    return db.child("users").push(to_data(url), token)
 
 
 def to_data(url):
     return {"url": url}
 
 
+def store_url(url, db, token):
+    return db.child("users").push(to_data(url), token)
+
+
 def connect_to_fb_and_store_url(url, username, password, firebase):
     # the function should only be called if we need to store the url
-    auth = firebase.auth()
-    user = authenticate(username, password, auth)
-    token = get_token(user)
+    token = get_token(username, password, firebase)
     db = firebase.database()
     store_url(url, db, token)
