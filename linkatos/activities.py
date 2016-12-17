@@ -37,7 +37,7 @@ def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
 
     # Store url
     if is_yes:
-        fb.connect_to_fb_and_store_url(url, FB_USER, FB_PASS, firebase)
+        fb.connect_and_store_url(url, FB_USER, FB_PASS, firebase)
         is_yes = False
 
     time.sleep(READ_WEBSOCKET_DELAY)

@@ -30,7 +30,7 @@ def store_url(url, db, token):
     return db.child("users").push(to_data(url), token)
 
 
-def connect_to_fb_and_store_url(url, username, password, firebase):
+def connect_and_store_url(url, username, password, firebase):
     # the function should only be called if we need to store the url
     token = get_token(username, password, firebase)
     db = firebase.database()
