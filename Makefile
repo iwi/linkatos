@@ -10,7 +10,7 @@ build:
 .PHONY: build
 
 install:
-	docker run -d --name $(id) \
+	docker run -d -t --name $(id) \
              --env SLACK_BOT_TOKEN=$(LINKATOS_SECRET) \
              --env BOT_ID=$(LINKATOS_ID) \
              --env FB_API_KEY=$(FB_API_KEY) \
@@ -43,7 +43,12 @@ endif
 .PHONY: test
 
 shell:
-	@$(DOCKER_TASK) $(image) bash
+	@$(DOCKER_TASK) --env SLACK_BOT_TOKEN=$(LINKATOS_SECRET) \
+                  --env BOT_ID=$(LINKATOS_ID) \
+                  --env FB_API_KEY=$(FB_API_KEY) \
+                  --env FB_USER=$(FB_USER) \
+                  --env FB_PASS=$(FB_PASS) \
+									$(image) bash
 .PHONY: shell
 
 repl:
