@@ -7,6 +7,24 @@ def is_empty(message_list):
     return ((message_list is None) or (len(message_list) == 0))
 
 
+def capture_thumbsup(sub_message):
+    parsed['message'] = 'thumbsup'
+    parsed['channel'] = sub_message['item']['channel']
+    parsed['item_ts'] = sub_message['item']['ts']
+    parsed['type'] = 'reaction'
+    parsed['user'] = sub_message['user']
+    parsed['item_user'] = sub_message['item_user']
+    return parsed
+
+
+def capture_url(sub_message):
+    parsed['channel'] = sub_message['channel']
+    parsed['ts'] = sub_message['ts']
+    parsed['type'] = 'url'
+    parsed['user'] = sub_message['user']
+    return parsed
+
+
 def parse(input_message, BOT_ID):
     """
         The Slack Real Time Messaging API is an events firehose.
@@ -27,8 +45,9 @@ def parse(input_message, BOT_ID):
               'user': None,
               'item_user': None}
 
+    # if the message list is empty return an empty object
     if is_empty(input_message):
-        return (parsed)  # empty output
+        return (parsed)
 
     for sub_message in input_message:
         if not utils.has_text(sub_message) or \
@@ -39,13 +58,8 @@ def parse(input_message, BOT_ID):
         # if the message is a thumbsup reaction
         if sub_message['type'] == 'reaction_added' and \
            sub_message['reaction'] == '+1':
-             parsed['message'] = 'thumbsup'
-             parsed['channel'] = sub_message['item']['channel']
-             parsed['item_ts'] = sub_message['item']['ts']
-             parsed['type'] = 'reaction'
-             parsed['user'] = sub_message['user']
-             parsed['item_user'] = sub_message['item_user']
-             return parsed
+            parsed = capture_thumbsup(sub_message)
+            return parsed
 
         # extract url from text if there is one
         text = sub_message['text']
@@ -53,10 +67,7 @@ def parse(input_message, BOT_ID):
 
         # if a url was found return the relevant data
         if parsed['message'] is not None:
-            parsed['channel'] = sub_message['channel']
-            parsed['ts'] = sub_message['ts']
-            parsed['type'] = 'url'
-            parsed['user'] = sub_message['user']
+            parsed = capture_url(sub_message)
             return parsed  # url output
 
     return (parsed)
