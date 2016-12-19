@@ -8,6 +8,7 @@ def is_empty(message_list):
 
 
 def capture_reaction(sub_message):
+    parsed = {}
     parsed['message'] = sub_message['reaction']
     parsed['channel'] = sub_message['item']['channel']
     parsed['item_ts'] = sub_message['item']['ts']
@@ -17,7 +18,9 @@ def capture_reaction(sub_message):
     return parsed
 
 
-def capture_url(sub_message):
+def capture_url(sub_message, url):
+    parsed = {}
+    parsed['message'] = url
     parsed['channel'] = sub_message['channel']
     parsed['ts'] = sub_message['ts']
     parsed['type'] = 'url'
@@ -63,11 +66,12 @@ def parse(input_message, BOT_ID):
 
         # extract url from text if there is one
         text = sub_message['text']
-        parsed['mesage'] = message.extract_url(text)
+        url = message.extract_url(text)
+        print(url)
 
         # if a url was found return the relevant data
-        if parsed['message'] is not None:
-            parsed = capture_url(sub_message)
+        if url is not None:
+            parsed = capture_url(sub_message, url)
             return parsed  # url output
 
-    return (parsed)
+    return parsed

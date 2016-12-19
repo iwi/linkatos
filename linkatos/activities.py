@@ -25,15 +25,11 @@ def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
 
     if utils.is_fresh_url(expecting_confirmation, parsed_message['type']):
         url = parsed_message['message']
+        expecting_confirmation = True
 
     print(url)
 
     printer.ask_confirmation(expecting_confirmation, parsed_message, slack_client)
-
-    # update expecting_confirmation
-    # when it's a url
-    expecting_confirmation = confirmation.update_if_url(parsed_message,
-                                                        expecting_confirmation)
 
     # check if there is an answer
     (expecting_confirmation, confirmed) = confirmation.evaluate(parsed_message,
