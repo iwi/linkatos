@@ -57,7 +57,7 @@ def parse(input_message, BOT_ID):
 
         # if the message is a thumbsup reaction
         if sub_message['type'] == 'reaction_added' and \
-           sub_message['reaction'] == '+1':
+           (sub_message['reaction'] == '+1' or sub_message['reaction'] == '-1'):
             parsed = capture_thumbsup(sub_message)
             return parsed
 
