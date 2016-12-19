@@ -13,14 +13,19 @@ def parse(input_message, BOT_ID):
         this parsing function returns None unless:
         1. someone posts a url starting with httpS?//
            in this case it returns the url and a out_type = 'url'
-        2. a yes or a no after a url
-           in this case it returns True for a yes, False for a no
-        The function also extracts the name of the channel
+        2. someone adds a thumbsup or a thumbsdown
+           in this case it returns the reaction and the type of outcome
     """
     print(input_message)  # print the list of outputs to get them on screen
 
     # default outcome
-    parsed = {'out': None, 'channel': None, 'type': None}
+    parsed = {'message': None,
+              'channel': None,
+              'ts': None,
+              'item_ts': None,
+              'type': None,
+              'user': None,
+              'item_user': None}
 
     if is_empty(input_message):
         return (parsed)  # empty output
@@ -29,26 +34,29 @@ def parse(input_message, BOT_ID):
         if not utils.has_text(sub_message) or \
            not utils.has_channel(sub_message) or \
            utils.from_bot(sub_message, BOT_ID):
-            return (parsed)  # empty output
+            return parsed  # empty output
 
-        parsed['channel'] = sub_message['channel']
+        # if the message is a thumbsup reaction
+        if sub_message['type'] == 'reaction_added' and \
+           sub_message['reaction'] == '+1':
+             parsed['message'] = 'thumbsup'
+             parsed['channel'] = sub_message['item']['channel']
+             parsed['item_ts'] = sub_message['item']['ts']
+             parsed['type'] = 'reaction'
+             parsed['user'] = sub_message['user']
+             parsed['item_user'] = sub_message['item_user']
+             return parsed
 
+        # extract url from text if there is one
         text = sub_message['text']
-        parsed['out'] = message.extract_url(text)
+        parsed['mesage'] = message.extract_url(text)
 
-        if parsed['out'] is not None:
+        # if a url was found return the relevant data
+        if parsed['message'] is not None:
+            parsed['channel'] = sub_message['channel']
+            parsed['ts'] = sub_message['ts']
             parsed['type'] = 'url'
-            return (parsed)  # url output
-        else:
-            parsed['out'] = utils.has_a_yes(text)
-
-            if parsed['out'] is True:
-                parsed['type'] = 'yn_answer'
-                return (parsed)  # True y/n answer
-            else:
-                if utils.has_a_no(text) is True:
-                    parsed['type'] = 'yn_answer'
-                    parsed['out'] = False
-                    return (parsed)  # False y/n answer
+            parsed['user'] = sub_message['user']
+            return parsed  # url output
 
     return (parsed)
