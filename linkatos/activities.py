@@ -36,15 +36,15 @@ def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
                                                         expecting_confirmation)
 
     # check if there is an answer
-    (expecting_confirmation, is_yes) = confirmation.process_if_yn(parsed_message,
-                                                                  expecting_confirmation)
+    (expecting_confirmation, confirmed) = confirmation.evaluate(parsed_message,
+                                                                expecting_confirmation)
 
     # printer.notify_confirmation(expecting_confirmation, is_yes)
 
     # Store url
-    if is_yes:
+    if confirmed:
         fb.connect_and_store_url(url, fb_credentials, firebase)
-        is_yes = False
+        # confirmed = False
 
     time.sleep(READ_WEBSOCKET_DELAY)
 

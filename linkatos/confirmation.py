@@ -9,12 +9,17 @@ def update_if_url(parsed_message, expecting_confirmation):
     return (expecting_confirmation)
 
 
-def process_if_yn(parsed_message, expecting_confirmation):
-    if expecting_confirmation is False or parsed_message['type'] is not 'yn_answer':
-        is_yes = False
-        return (expecting_confirmation, is_yes)
+def evaluate(parsed_message, expecting_confirmation):
+    # returns (@expecting_confirmation: boolean, @confirmation: boolean)
+    if expecting_confirmation is False or parsed_message['type'] is not 'reaction':
+        return (False, False)
 
-    is_yes = parsed_message['out']  # True if 'yes', False if 'no'
-    expecting_confirmation = False
+    if parsed_message['message'] == '+1':
+        return (False, True)
 
-    return (expecting_confirmation, is_yes)
+    if parsed_message['message'] == '-1':
+        return (False, False)
+
+    # when we're expecting a confirmation and it's not a thumbs up or a thumbs
+    # down, we keep waiting
+    return (expecting_confirmation, False)
