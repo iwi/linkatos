@@ -10,15 +10,21 @@ def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
                      fb_credentials, firebase):
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
 
-    # parse the messages. Get a dictionary with @out, @channel,
-    # @out_type
+    # parse the messages. Get a dictionary with
+    # {'message': <url or reaction (:+1: or :-1:)>,
+    # 'channel': <channel where the message was posted>,
+    # 'ts': <timestamp - used as identifier>,
+    # 'item_ts': <for reactions, timestamp of the item>,
+    # 'type': <'url', 'reaction'>,
+    # 'user': <user id>,
+    # 'item_user': <for reactions the user that posted the item>}
     parsed_message = parser.parse(slack_client.rtm_read(), BOT_ID)
 
     print(parsed_message)
     print(expecting_confirmation)
 
     if utils.is_fresh_url(expecting_confirmation, parsed_message['type']):
-        url = parsed_message['out']
+        url = parsed_message['message']
 
     print(url)
 

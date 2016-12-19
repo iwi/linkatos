@@ -7,8 +7,8 @@ def is_empty(message_list):
     return ((message_list is None) or (len(message_list) == 0))
 
 
-def capture_thumbsup(sub_message):
-    parsed['message'] = 'thumbsup'
+def capture_reaction(sub_message):
+    parsed['message'] = sub_message['reaction']
     parsed['channel'] = sub_message['item']['channel']
     parsed['item_ts'] = sub_message['item']['ts']
     parsed['type'] = 'reaction'
@@ -58,7 +58,7 @@ def parse(input_message, BOT_ID):
         # if the message is a thumbsup reaction
         if sub_message['type'] == 'reaction_added' and \
            (sub_message['reaction'] == '+1' or sub_message['reaction'] == '-1'):
-            parsed = capture_thumbsup(sub_message)
+            parsed = capture_reaction(sub_message)
             return parsed
 
         # extract url from text if there is one
