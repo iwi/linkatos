@@ -44,3 +44,7 @@ def has_reaction_keys(message):
             'channel' in message['item'] and \
             'user' in message and \
             'item_user' in message)
+
+
+def is_fresh_url(expecting_confirmation, message_type):
+    return (not expecting_confirmation) and message_type is 'url'
