@@ -31,10 +31,10 @@ def has_channel(message):
 
 
 def has_text_keys(message):
-    return not ('text' in message and \
-                'channel' in message and \
-                'ts' in message and \
-                'user' in message)
+    return ('text' in message and \
+            'channel' in message and \
+            'ts' in message and \
+            'user' in message)
 
 
 def has_reaction_keys(message):
