@@ -8,7 +8,6 @@ def is_empty(message_list):
 
 
 def capture_reaction(sub_message):
-    print('capture reaction!!!!')
     parsed = {}
     parsed['message'] = sub_message['reaction']
     parsed['channel'] = sub_message['item']['channel']
@@ -67,7 +66,6 @@ def parse(input_message, BOT_ID):
         if utils.has_text_keys(sub_message):
             text = sub_message['text']
             url = message.extract_url(text)
-            print(url)
 
             # if a url was found return the relevant data
             if url is not None:
