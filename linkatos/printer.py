@@ -8,12 +8,11 @@ def bot_says(channel, text, slack_client):
                                  as_user=True)
 
 
-def compose_question(url):
-    return "Do you want me to store the link {} for you?".format(url)
+def compose_explanation(url):
+    return "If you would like {} to be stored please react to it with a :+1:".format(url)
 
 
-def ask_confirmation(expecting_confirmation, parsed_message, slack_client):
-    if is_fresh_url(expecting_confirmation, parsed_message['type']):
-        bot_says(parsed_message['channel'],
-                 compose_question(parsed_message['out']),
-                 slack_client)
+def ask_confirmation(parsed_message, slack_client):
+    bot_says(parsed_message['channel'],
+             compose_explanation(parsed_message['message']),
+             slack_client)
