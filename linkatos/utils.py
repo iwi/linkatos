@@ -30,5 +30,17 @@ def has_channel(message):
     return ('channel' in message)
 
 
-def is_fresh_url(expecting_confirmation, message_type):
-    return (not expecting_confirmation) and message_type is 'url'
+def has_text_keys(message):
+    return not ('text' in message and \
+                'channel' in message and \
+                'ts' in message and \
+                'user' in message)
+
+
+def has_reaction_keys(message):
+    return ('reaction' in message and \
+            'item' in message and \
+            'ts' in message['item'] and \
+            'channel' in message['item'] and \
+            'user' in message and \
+            'item_user' in message)

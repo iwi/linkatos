@@ -29,15 +29,16 @@ if __name__ == '__main__':
 
     # verify linkatos connection
     if slack_client.rtm_connect():
+        parsed_url_message = {}
         expecting_confirmation = False
         url = None
 
         while True:
             # note that url is returned to keep it over several cylcles in
             # whilst we wait for an answer
-            (expecting_confirmation, url) = activities.keep_wanted_urls(
+            (expecting_confirmation, parsed_url_message) = activities.keep_wanted_urls(
                                                 expecting_confirmation,
-                                                url,
+                                                parsed_url_message,
                                                 slack_client,
                                                 BOT_ID,
                                                 fb_credentials,

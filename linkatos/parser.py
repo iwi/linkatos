@@ -8,6 +8,7 @@ def is_empty(message_list):
 
 
 def capture_reaction(sub_message):
+    print('capture reaction!!!!')
     parsed = {}
     parsed['message'] = sub_message['reaction']
     parsed['channel'] = sub_message['item']['channel']
@@ -37,7 +38,7 @@ def parse(input_message, BOT_ID):
         2. someone adds a thumbsup or a thumbsdown
            in this case it returns the reaction and the type of outcome
     """
-    print(input_message)  # print the list of outputs to get them on screen
+    print('input_message:', input_message)  # print the list of outputs to get them on screen
 
     # default outcome
     parsed = {'message': None,
@@ -53,25 +54,24 @@ def parse(input_message, BOT_ID):
         return (parsed)
 
     for sub_message in input_message:
-        if not utils.has_text(sub_message) or \
-           not utils.has_channel(sub_message) or \
-           utils.from_bot(sub_message, BOT_ID):
-            return parsed  # empty output
+        print('sub_message:', sub_message)
 
-        # if the message is a thumbsup reaction
-        if sub_message['type'] == 'reaction_added' and \
+        # capture a reaction if the message is a thumbsup/down reaction
+        if utils.has_reaction_keys(sub_message) and \
+           sub_message['type'] == 'reaction_added' and \
            (sub_message['reaction'] == '+1' or sub_message['reaction'] == '-1'):
             parsed = capture_reaction(sub_message)
             return parsed
 
-        # extract url from text if there is one
-        text = sub_message['text']
-        url = message.extract_url(text)
-        print(url)
+        # extract url from text if there is text and it has a url
+        if utils.has_text_keys(sub_message):
+            text = sub_message['text']
+            url = message.extract_url(text)
+            print(url)
 
-        # if a url was found return the relevant data
-        if url is not None:
-            parsed = capture_url(sub_message, url)
-            return parsed  # url output
+            # if a url was found return the relevant data
+            if url is not None:
+                parsed = capture_url(sub_message, url)
+                return parsed  # url output
 
     return parsed
