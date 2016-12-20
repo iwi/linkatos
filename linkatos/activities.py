@@ -30,7 +30,6 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, slack_client,
 
     print('parsed_url_message:', parsed_url_message)
 
-
     # check if there is an answer
     if 'ts' in parsed_url_message:
         item_ts = parsed_url_message['ts']
@@ -43,10 +42,9 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, slack_client,
 
     # Store url
     if confirmed:
-        url =  parsed_url_message['message']
+        url = parsed_url_message['message']
         fb.connect_and_store_url(url, fb_credentials, firebase)
         # printer.add_stored_reaction(parsed_url_message)
-
 
     time.sleep(READ_WEBSOCKET_DELAY)
 

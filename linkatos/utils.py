@@ -31,18 +31,18 @@ def has_channel(message):
 
 
 def has_text_keys(message):
-    return ('text' in message and \
-            'channel' in message and \
-            'ts' in message and \
+    return ('text' in message and
+            'channel' in message and
+            'ts' in message and
             'user' in message)
 
 
 def has_reaction_keys(message):
-    return ('reaction' in message and \
-            'item' in message and \
-            'ts' in message['item'] and \
-            'channel' in message['item'] and \
-            'user' in message and \
+    return ('reaction' in message and
+            'item' in message and
+            'ts' in message['item'] and
+            'channel' in message['item'] and
+            'user' in message and
             'item_user' in message)
 
 
