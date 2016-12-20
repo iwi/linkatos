@@ -32,7 +32,7 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, slack_client,
 
 
     # check if there is an answer
-    if parsed_url_message:
+    if 'ts' in parsed_url_message:
         item_ts = parsed_url_message['ts']
     else:
         item_ts = None
