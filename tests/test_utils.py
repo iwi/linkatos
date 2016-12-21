@@ -27,3 +27,62 @@ def test_has_channel():
     }
 
     assert utils.has_channel(input_message) is True
+
+
+def test_has_text_keys():
+    message = {
+        'text': 'foo',
+        'channel': 'sample_channel',
+        'ts': 1234.1234,
+        'user': 'sample_user'
+    }
+    assert utils.has_text_keys(message) is True
+
+
+def test_doesnt_have_text_key():
+    message = {
+        'channel': 'sample_channel',
+        'ts': 1234.1234,
+        'user': 'sample_user'
+    }
+    assert utils.has_text_keys(message) is False
+
+
+def test_doesnt_have_channel_key():
+    message = {
+        'text': 'foo',
+        'ts': 1234.1234,
+        'user': 'sample_user'
+    }
+    assert utils.has_text_keys(message) is False
+
+
+def test_doesnt_have_ts_key():
+    message = {
+        'text': 'foo',
+        'channel': 'sample_channel',
+        'user': 'sample_user'
+    }
+    assert utils.has_text_keys(message) is False
+
+
+def test_doesnt_have_user_key():
+    message = {
+        'text': 'foo',
+        'channel': 'sample_channel',
+        'ts': 1234.1234
+    }
+    assert utils.has_text_keys(message) is False
+
+
+def test_has_reaction_keys():
+    message = {
+        'reaction': '+1',
+        'item': 'example_item',
+        'item': {'ts': 1234.1234,
+                 'channel': 'example_channel'
+                 },
+        'user': 'example_user',
+        'item_user': 'example_item_user'
+    }
+    assert utils.has_reaction_keys(message) is True
