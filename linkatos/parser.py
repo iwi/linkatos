@@ -8,23 +8,25 @@ def is_empty(message_list):
 
 
 def capture_reaction(sub_message):
-    parsed = {}
-    parsed['message'] = sub_message['reaction']
-    parsed['channel'] = sub_message['item']['channel']
-    parsed['item_ts'] = sub_message['item']['ts']
-    parsed['type'] = 'reaction'
-    parsed['user'] = sub_message['user']
-    parsed['item_user'] = sub_message['item_user']
+    parsed = {
+        'message': sub_message['reaction'],
+        'channel': sub_message['item']['channel'],
+        'item_ts': sub_message['item']['ts'],
+        'type': 'reaction',
+        'user': sub_message['user'],
+        'item_user': sub_message['item_user']
+    }
     return parsed
 
 
 def capture_url(sub_message, url):
-    parsed = {}
-    parsed['message'] = url
-    parsed['channel'] = sub_message['channel']
-    parsed['ts'] = sub_message['ts']
-    parsed['type'] = 'url'
-    parsed['user'] = sub_message['user']
+    parsed = {
+        'message': url,
+        'channel': sub_message['channel'],
+        'ts': sub_message['ts'],
+        'type': 'url',
+        'user': sub_message['user']
+    }
     return parsed
 
 
@@ -40,13 +42,15 @@ def parse(input_message, BOT_ID):
     print('input_message:', input_message)  # print the list of outputs to get them on screen
 
     # default outcome
-    parsed = {'message': None,
-              'channel': None,
-              'ts': None,
-              'item_ts': None,
-              'type': None,
-              'user': None,
-              'item_user': None}
+    parsed = {
+        'message': None,
+        'channel': None,
+        'ts': None,
+        'item_ts': None,
+        'type': None,
+        'user': None,
+        'item_user': None
+    }
 
     # if the message list is empty return an empty object
     if is_empty(input_message):
