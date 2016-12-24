@@ -32,16 +32,19 @@ if __name__ == '__main__':
         parsed_url_message = {}
         expecting_confirmation = False
         url = None
+        url_message_id = None
 
         while True:
             # note that url is returned to keep it over several cylcles in
             # whilst we wait for an answer
-            (expecting_confirmation, parsed_url_message) = activities.keep_wanted_urls(
-                                                expecting_confirmation,
-                                                parsed_url_message,
-                                                slack_client,
-                                                BOT_ID,
-                                                fb_credentials,
-                                                firebase)
+            (expecting_confirmation, parsed_url_message, url_message_id) = \
+                activities.keep_wanted_urls(
+                    expecting_confirmation,
+                    parsed_url_message,
+                    url_message_id,
+                    slack_client,
+                    BOT_ID,
+                    fb_credentials,
+                    firebase)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")

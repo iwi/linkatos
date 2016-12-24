@@ -6,8 +6,8 @@ import linkatos.utils as utils
 import linkatos.firebase as fb
 
 
-def keep_wanted_urls(expecting_confirmation, parsed_url_message, slack_client,
-                     BOT_ID, fb_credentials, firebase):
+def keep_wanted_urls(expecting_confirmation, parsed_url_message, url_message_id,
+                     slack_client, BOT_ID, fb_credentials, firebase):
     READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
 
     # parse the messages. Get a dictionary with
@@ -27,18 +27,17 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, slack_client,
         parsed_url_message = parsed_message
         expecting_confirmation = True
         printer.ask_confirmation(parsed_message, slack_client)
+        url_message_id = parsed_url_message['ts']
 
     print('parsed_url_message:', parsed_url_message)
 
     # check if there is an answer
-    if 'ts' in parsed_url_message:
-        item_ts = parsed_url_message['ts']
+    if expecting_confirmation:
+        confirmed = confirmation.evaluate(parsed_message, url_message_id)
+        if confirmed is not None:
+            expecting_confirmation = False
     else:
-        item_ts = None
-
-    (expecting_confirmation, confirmed) = confirmation.evaluate(expecting_confirmation,
-                                                                parsed_message,
-                                                                item_ts)
+        confirmed = None
 
     # Store url
     if confirmed:
@@ -48,4 +47,4 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, slack_client,
 
     time.sleep(READ_WEBSOCKET_DELAY)
 
-    return (expecting_confirmation, parsed_url_message)
+    return (expecting_confirmation, parsed_url_message, url_message_id)

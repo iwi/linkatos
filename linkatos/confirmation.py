@@ -9,19 +9,22 @@ def update_if_url(parsed_message, expecting_confirmation):
     return (expecting_confirmation)
 
 
-def evaluate(expecting_confirmation, parsed_message, item_ts):
-    # returns (@expecting_confirmation: boolean, @confirmation: boolean)
-    if expecting_confirmation is False or \
-       parsed_message['type'] is not 'reaction' or \
-       parsed_message['item_ts'] != item_ts:
-        return (expecting_confirmation, False)
+def evaluate_reaction(reaction):
+    return reaction == '+1'
 
-    if parsed_message['message'] == '+1':
-        return (False, True)
 
-    if parsed_message['message'] == '-1':
-        return (False, False)
+def known_reaction(reaction):
+    return reaction in ['+1', '-1']
 
-    # when we're expecting a confirmation and it's not a thumbs up or a thumbs
-    # down, we keep waiting
-    return (expecting_confirmation, False)
+
+def evaluate(parsed_message, url_message_id):
+    if parsed_message['type'] != 'reaction':
+        return None
+
+    reaction = parsed_message['message']
+    reaction_message_id = parsed_message['item_ts']
+
+    if not known_reaction(reaction) or reaction_message_id != url_message_id:
+        return None
+
+    return evaluate_reaction(reaction)
