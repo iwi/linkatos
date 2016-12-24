@@ -18,7 +18,7 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, url_message_id,
     # 'type': <'url', 'reaction'>,
     # 'user': <user id>,
     # 'item_user': <for reactions the user that posted the item>}
-    parsed_message = parser.parse(slack_client.rtm_read(), BOT_ID)
+    parsed_message = parser.parse(slack_client.rtm_read())
 
     print('parsed_message:', parsed_message)
     print('expecting_confirmation:', expecting_confirmation)
@@ -31,8 +31,8 @@ def keep_wanted_urls(expecting_confirmation, parsed_url_message, url_message_id,
 
     print('parsed_url_message:', parsed_url_message)
 
-    # check if there is an answer
     if expecting_confirmation:
+        # check if there is an answer
         confirmed = confirmation.evaluate(parsed_message, url_message_id)
         if confirmed is not None:
             expecting_confirmation = False

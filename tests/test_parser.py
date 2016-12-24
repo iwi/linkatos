@@ -2,26 +2,6 @@ import pytest
 import linkatos.parser as parser
 
 
-# test message parsing
-def test_ignore_linkatos_message():
-    message = [{
-        'user': 'bot_id',
-        'channel': 'channel',
-        'text': 'http://example.org'
-    }]
-
-    parsed = {'message': None,
-              'channel': None,
-              'ts': None,
-              'item_ts': None,
-              'type': None,
-              'user': None,
-              'item_user': None}
-
-
-    assert parser.parse(message, 'bot_id') == parsed
-
-
 def test_capture_reaction():
     message = {
         'reaction': '+1',

@@ -30,7 +30,7 @@ def capture_url(sub_message, url):
     return parsed
 
 
-def parse(input_message, BOT_ID):
+def parse(input_message):
     """
         The Slack Real Time Messaging API is an events firehose.
         this parsing function returns None unless:
