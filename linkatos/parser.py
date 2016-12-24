@@ -7,25 +7,25 @@ def is_empty(message_list):
     return ((message_list is None) or (len(message_list) == 0))
 
 
-def capture_reaction(sub_message):
+def capture_reaction(message):
     parsed = {
-        'message': sub_message['reaction'],
-        'channel': sub_message['item']['channel'],
-        'item_ts': sub_message['item']['ts'],
+        'message': message['reaction'],
+        'channel': message['item']['channel'],
+        'item_ts': message['item']['ts'],
         'type': 'reaction',
-        'user': sub_message['user'],
-        'item_user': sub_message['item_user']
+        'user': message['user'],
+        'item_user': message['item_user']
     }
     return parsed
 
 
-def capture_url(sub_message, url):
+def capture_url(message, url):
     parsed = {
         'message': url,
-        'channel': sub_message['channel'],
-        'ts': sub_message['ts'],
+        'channel': message['channel'],
+        'ts': message['ts'],
         'type': 'url',
-        'user': sub_message['user']
+        'user': message['user']
     }
     return parsed
 
@@ -56,24 +56,24 @@ def parse(input_message):
     if is_empty(input_message):
         return (parsed)
 
-    for sub_message in input_message:
-        print('sub_message:', sub_message)
+    for message in input_message:
+        print('message:', message)
 
         # capture a reaction if the message is a thumbsup/down reaction
-        if utils.has_reaction_keys(sub_message) and \
-           sub_message['type'] == 'reaction_added' and \
-           (sub_message['reaction'] == '+1' or sub_message['reaction'] == '-1'):
-            parsed = capture_reaction(sub_message)
+        if utils.has_reaction_keys(message) and \
+           message['type'] == 'reaction_added' and \
+           (message['reaction'] == '+1' or message['reaction'] == '-1'):
+            parsed = capture_reaction(message)
             return parsed
 
         # extract url from text if there is text and it has a url
-        if utils.has_text_keys(sub_message):
-            text = sub_message['text']
+        if utils.has_text_keys(message):
+            text = message['text']
             url = message.extract_url(text)
 
             # if a url was found return the relevant data
             if url is not None:
-                parsed = capture_url(sub_message, url)
+                parsed = capture_url(message, url)
                 return parsed  # url output
 
     return parsed
