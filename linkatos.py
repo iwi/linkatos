@@ -30,18 +30,17 @@ if __name__ == '__main__':
     # verify linkatos connection
     if slack_client.rtm_connect():
         parsed_url_message = {}
-        expecting_confirmation = False
-        url = None
-        url_message_id = None
+        expecting_url = True
+        expecting_reaction = False
 
         while True:
             # note that url is returned to keep it over several cylcles in
             # whilst we wait for an answer
-            (expecting_confirmation, parsed_url_message, url_message_id) = \
+            (expecting_url, expecting_reaction, parsed_url_message) = \
                 activities.event_consumer(
-                    expecting_confirmation,
+                    expecting_url,
+                    expecting_reaction,
                     parsed_url_message,
-                    url_message_id,
                     slack_client,
                     fb_credentials,
                     firebase)
