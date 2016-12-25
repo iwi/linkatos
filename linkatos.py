@@ -38,12 +38,11 @@ if __name__ == '__main__':
             # note that url is returned to keep it over several cylcles in
             # whilst we wait for an answer
             (expecting_confirmation, parsed_url_message, url_message_id) = \
-                activities.keep_wanted_urls(
+                activities.event_consumer(
                     expecting_confirmation,
                     parsed_url_message,
                     url_message_id,
                     slack_client,
-                    BOT_ID,
                     fb_credentials,
                     firebase)
     else:
