@@ -1,6 +1,5 @@
-import linkatos.message as message
-import linkatos.utils
-import linkatos.utils as utils
+import message as message
+import utils
 
 
 def is_empty(message_list):

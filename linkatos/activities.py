@@ -1,9 +1,9 @@
 import time
-import linkatos.parser as parser
-import linkatos.confirmation as confirmation
-import linkatos.printer as printer
-import linkatos.utils as utils
-import linkatos.firebase as fb
+import parser
+import confirmation
+import printer
+import utils
+import firebase as fb
 
 
 def handle(reaction, url, fb_credentials, firebase):
