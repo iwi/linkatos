@@ -6,6 +6,10 @@ import utils
 import firebase as fb
 
 
+def is_empty(events):
+    return ((events is None) or (len(events) == 0))
+
+
 def handle(reaction, url, fb_credentials, firebase):
     if reaction['reaction'] == '+1':
         fb.connect_and_store_url(url, fb_credentials, firebase)
