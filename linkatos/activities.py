@@ -15,10 +15,10 @@ def is_url(url_message):
 
 def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                    slack_client, fb_credentials, firebase):
-    READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
 
     # Read slack events
     events = slack_client.rtm_read()
+    time.sleep(1)  # 1 second delay after reading
 
     if is_empty(events):
         return (expecting_url, expecting_reaction, parsed_url_message)
@@ -44,11 +44,5 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                     react.handle(reaction['reaction'], parsed_url_message['url'],
                                  fb_credentials, firebase)
                     expecting_url = True
-
-        time.sleep(READ_WEBSOCKET_DELAY)
-
-
-
-    time.sleep(READ_WEBSOCKET_DELAY)
 
     return (expecting_url, expecting_reaction, parsed_url_message)

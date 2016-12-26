@@ -20,7 +20,4 @@ def handle(reaction, url, fb_credentials, firebase):
 
 
 def is_confirmation(reaction, url_message_id, reaction_to_id):
-    if reacting_to_url(url_message_id, reaction_to_id) and known_reaction(reaction):
-        return True
-
-    return False
+    return reacting_to_url(url_message_id, reaction_to_id) and known_reaction(reaction)
