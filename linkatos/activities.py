@@ -34,9 +34,8 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                 if is_url(parsed_url_message):
                     printer.ask_confirmation(parsed_url_message, slack_client)
                     expecting_url = False
-                    expecting_reaction = True
 
-            if expecting_reaction and event['type'] == 'reaction_added':
+            if not expecting_url and event['type'] == 'reaction_added':
                 reaction = parser.parse_reaction_added(event)
 
                 if react.is_confirmation(reaction['reaction'],
@@ -44,8 +43,8 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                                          reaction['to_id']):
                     react.handle(reaction['reaction'], parsed_url_message['url'],
                                  fb_credentials, firebase)
-                    expecting_reaction = False
                     expecting_url = True
+
         time.sleep(READ_WEBSOCKET_DELAY)
 
 
