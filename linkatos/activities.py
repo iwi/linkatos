@@ -39,7 +39,7 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                 reaction = parser.parse_reaction_added(event)
 
                 if react.is_confirmation(reaction['reaction'],
-                                         parsed_url_message['id']
+                                         parsed_url_message['id'],
                                          reaction['to_id']):
                     react.handle(reaction, parsed_url_message['url'],
                                  fb_credentials, firebase)
