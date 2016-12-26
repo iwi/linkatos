@@ -1,3 +1,6 @@
+import linkatos.firebase as fb
+
+
 def positive_reaction(reaction):
     return reaction == '+1'
 

@@ -1,10 +1,8 @@
 import time
-import parser
-import confirmation
-import printer
-import utils
-import firebase as fb
-import reaction as react
+import linkatos.parser as parser
+import linkatos.printer as printer
+import linkatos.firebase as fb
+import linkatos.reaction as react
 
 
 def is_empty(events):
@@ -26,6 +24,9 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
         return (expecting_url, expecting_reaction, parsed_url_message)
 
     for event in events:
+        print(event)
+        print('expecting_url: ', expecting_url)
+        print('expecting_reaction: ', expecting_reaction)
         if 'type' in event:
             if expecting_url and event['type'] == 'message':
                 parsed_url_message = parser.parse_url_message(event)
@@ -41,10 +42,13 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                 if react.is_confirmation(reaction['reaction'],
                                          parsed_url_message['id'],
                                          reaction['to_id']):
-                    react.handle(reaction, parsed_url_message['url'],
+                    react.handle(reaction['reaction'], parsed_url_message['url'],
                                  fb_credentials, firebase)
                     expecting_reaction = False
                     expecting_url = True
+        time.sleep(READ_WEBSOCKET_DELAY)
+
+
 
     time.sleep(READ_WEBSOCKET_DELAY)
 

@@ -1,13 +1,12 @@
-import message as message
-import utils
+import linkatos.message as message
 
 
 def parse_url_message(event):
-    url = message.extract_url(text)
+    url = message.extract_url(event['text'])
 
     if url is None:
         empty_url_message = {
-            'message': None,
+            'url': None,
             'channel': None,
             'id': None,
             'type': None,
@@ -17,7 +16,7 @@ def parse_url_message(event):
         return empty_url_message
 
     url_message = {
-        'message': url,
+        'url': url,
         'channel': event['channel'],
         'id': event['ts'],
         'type': 'url',
@@ -36,4 +35,4 @@ def parse_reaction_added(event):
         'user': event['user'],
         'to_user': event['item_user']
     }
-    return parsed
+    return reaction
