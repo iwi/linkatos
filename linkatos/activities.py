@@ -26,23 +26,22 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
     for event in events:
         print(event)
         print('expecting_url: ', expecting_url)
-        print('expecting_reaction: ', expecting_reaction)
-        if 'type' in event:
-            if expecting_url and event['type'] == 'message':
-                parsed_url_message = parser.parse_url_message(event)
 
-                if is_url(parsed_url_message):
-                    printer.ask_confirmation(parsed_url_message, slack_client)
-                    expecting_url = False
+        if expecting_url and event['type'] == 'message':
+            parsed_url_message = parser.parse_url_message(event)
 
-            if not expecting_url and event['type'] == 'reaction_added':
-                reaction = parser.parse_reaction_added(event)
+            if is_url(parsed_url_message):
+                printer.ask_confirmation(parsed_url_message, slack_client)
+                expecting_url = False
 
-                if react.is_confirmation(reaction['reaction'],
-                                         parsed_url_message['id'],
-                                         reaction['to_id']):
-                    react.handle(reaction['reaction'], parsed_url_message['url'],
-                                 fb_credentials, firebase)
-                    expecting_url = True
+        if not expecting_url and event['type'] == 'reaction_added':
+            reaction = parser.parse_reaction_added(event)
+
+            if react.is_confirmation(reaction['reaction'],
+                                     parsed_url_message['id'],
+                                     reaction['to_id']):
+                react.handle(reaction['reaction'], parsed_url_message['url'],
+                             fb_credentials, firebase)
+                expecting_url = True
 
     return (expecting_url, expecting_reaction, parsed_url_message)
