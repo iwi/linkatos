@@ -27,7 +27,7 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
 
     for event in events:
         if 'type' in event:
-            if event['type'] == 'message' and expecting_url:
+            if expecting_url and event['type'] == 'message':
                 parsed_url_message = parser.parse_url_message(event)
 
                 if is_url(parsed_url_message):
@@ -35,7 +35,7 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                     expecting_url = False
                     expecting_reaction = True
 
-            if event['type'] == 'reaction_added' and expecting_reaction:
+            if expecting_reaction and event['type'] == 'reaction_added':
                 reaction = parser.parse_reaction_added(event)
 
                 if react.is_confirmation(reaction['reaction'],
