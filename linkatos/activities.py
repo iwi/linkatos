@@ -11,6 +11,10 @@ def is_empty(events):
     return ((events is None) or (len(events) == 0))
 
 
+def is_url(url_message):
+    return url_message['type'] == 'url'
+
+
 def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                    slack_client, fb_credentials, firebase):
 
