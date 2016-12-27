@@ -7,7 +7,7 @@ def bot_says(channel, text, slack_client):
 
 def compose_explanation(url):
     return "If you would like {} to be stored please react to it with a :+1:, \
-            if you would like it to be disregarded use :-1:".format(url)
+if you would like it to be ignored use :-1:".format(url)
 
 
 def ask_confirmation(message, slack_client):
