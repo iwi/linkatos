@@ -13,7 +13,7 @@ def test_parse_reaction_added():
         'user': 'example_user',
         'item_user': 'example_item_user'
     }
-    reaction= {
+    reaction = {
         'reaction': '+1',
         'channel': 'example_channel',
         'to_id': 1234.1234,

@@ -9,6 +9,7 @@ def test_basic_url_detection_of_https():
     text = "foo <https://example.org>"
     assert message.extract_url(text) == expected
 
+
 def test_hash_in_url():
     expected = "https://foo.org#bar"
     text = "<https://foo.org#bar>"
