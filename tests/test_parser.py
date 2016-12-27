@@ -2,8 +2,8 @@ import pytest
 import linkatos.parser as parser
 
 
-def test_capture_reaction():
-    message = {
+def test_parse_reaction_added():
+    event = {
         'reaction': '+1',
         'channel': 'example_channel',
         'item': {
@@ -13,34 +13,46 @@ def test_capture_reaction():
         'user': 'example_user',
         'item_user': 'example_item_user'
     }
-
     reaction= {
-        'message': '+1',
+        'reaction': '+1',
         'channel': 'example_channel',
-        'item_ts': 1234.1234,
+        'to_id': 1234.1234,
         'type': 'reaction',
         'user': 'example_user',
-        'item_user': 'example_item_user'
+        'to_user': 'example_item_user'
     }
+    assert parser.parse_reaction_added(event) == reaction
 
-    assert parser.capture_reaction(message) == reaction
 
-
-def test_capture_url():
-    message = {
+def test_parse_url():
+    event = {
+        'text': '<http://foo.bar>',
         'channel': 'example_channel',
         'ts': 1234.1234,
-        'user': 'example_user',
+        'user': 'example_user'
     }
-
-    url = 'http://foo.bar'
-
     parsed_url = {
-        'message': 'http://foo.bar',
+        'url': 'http://foo.bar',
+        'channel': 'example_channel',
+        'id': 1234.1234,
+        'type': 'url',
+        'user': 'example_user'
+    }
+    assert parser.parse_url_message(event) == parsed_url
+
+
+def test_empty_message():
+    event = {
+        'text': 'not a url',
         'channel': 'example_channel',
         'ts': 1234.1234,
-        'type': 'url',
-        'user': 'example_user',
+        'user': 'example_user'
     }
-
-    assert parser.capture_url(message, url) == parsed_url
+    empty_url_message = {
+            'url': None,
+            'channel': None,
+            'id': None,
+            'type': None,
+            'user': None
+    }
+    assert parser.parse_url_message(event) == empty_url_message
