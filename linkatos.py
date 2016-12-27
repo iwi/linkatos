@@ -1,6 +1,7 @@
 #! /usr/bin/env python
 
 import os
+import time
 from slackclient import SlackClient
 import pyrebase
 import linkatos.firebase as fb
@@ -33,6 +34,8 @@ if __name__ == '__main__':
         expecting_reaction = False
 
         while True:
+            time.sleep(1)  # 1 second delay after reading
+
             # note that url message is returned to keep it over several cylcles
             # in whilst we wait for an answer
             (expecting_url, expecting_reaction, parsed_url_message) = \

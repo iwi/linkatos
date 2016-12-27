@@ -1,4 +1,3 @@
-import time
 import linkatos.parser as parser
 import linkatos.printer as printer
 import linkatos.firebase as fb
@@ -18,7 +17,6 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
 
     # Read slack events
     events = slack_client.rtm_read()
-    time.sleep(1)  # 1 second delay after reading
 
     if is_empty(events):
         return (expecting_url, expecting_reaction, parsed_url_message)
