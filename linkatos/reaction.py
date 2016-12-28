@@ -9,10 +9,13 @@ def known_reaction(reaction):
     return reaction in ['+1', '-1']
 
 
-def reacting_to_url(url_message_id, reaction_to_id):
-            index = react.find_match_id(reaction['to_id'], url_cache_list)
+def get_index(url_cache_list, reaction_to_id):
+    for index in xrange(0, len(url_cache_list) - 1):
+        if url_cache_list[index]['id'] == reaction_to_id:
+            return index
 
-    return url_message_id == reaction_to_id
+    # if not found
+    return None
 
 
 def handle(reaction, url, fb_credentials, firebase):
@@ -21,6 +24,8 @@ def handle(reaction, url, fb_credentials, firebase):
     # printer.add_stored_reaction(url_cache)
 
 
+def is_confirmation(reaction, url_cache_list, reaction_to_id):
+    if not known_reaction(reaction):
+        return None
 
-def is_confirmation(reaction, url_message_id, reaction_to_id):
-    return reacting_to_url(url_message_id, reaction_to_id) and known_reaction(reaction)
+    return get_index(url_cache_list, reaction_to_id)
