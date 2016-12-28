@@ -8,10 +8,6 @@ def is_empty(events):
     return ((events is None) or (len(events) == 0))
 
 
-def is_url(url_message):
-    return url_message['type'] == 'url'
-
-
 def event_consumer(expecting_url, parsed_url_message, slack_client,
                    fb_credentials, firebase):
 
@@ -28,7 +24,8 @@ def event_consumer(expecting_url, parsed_url_message, slack_client,
         if expecting_url and event['type'] == 'message':
             parsed_url_message = parser.parse_url_message(event)
 
-            if is_url(parsed_url_message):
+            # if is_url(parsed_url_message):
+            if parsed_url_message is not None:
                 printer.ask_confirmation(parsed_url_message, slack_client)
                 expecting_url = False
 

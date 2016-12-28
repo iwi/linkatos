@@ -1,6 +1,7 @@
 import pytest
 import linkatos.reaction as react
 
+
 def test_positive_reaction():
     reaction = '+1'
     assert react.positive_reaction(reaction) is True

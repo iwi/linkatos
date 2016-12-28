@@ -5,15 +5,7 @@ def parse_url_message(event):
     url = message.extract_url(event['text'])
 
     if url is None:
-        empty_url_message = {
-            'url': None,
-            'channel': None,
-            'id': None,
-            'type': None,
-            'user': None
-        }
-
-        return empty_url_message
+        return None
 
     url_message = {
         'url': url,

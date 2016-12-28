@@ -48,11 +48,4 @@ def test_empty_message():
         'ts': 1234.1234,
         'user': 'example_user'
     }
-    empty_url_message = {
-            'url': None,
-            'channel': None,
-            'id': None,
-            'type': None,
-            'user': None
-    }
-    assert parser.parse_url_message(event) == empty_url_message
+    assert parser.parse_url_message(event) is None
