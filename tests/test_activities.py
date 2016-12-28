@@ -2,7 +2,7 @@ import pytest
 import linkatos.activities as activities
 
 
-def test_None_event():
+def test_none_event():
     event = None
     assert activities.is_empty(event) is True
 
