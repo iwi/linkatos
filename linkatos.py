@@ -31,20 +31,17 @@ if __name__ == '__main__':
     if slack_client.rtm_connect():
         parsed_url_message = {}
         expecting_url = True
-        expecting_reaction = False
 
         while True:
             time.sleep(1)  # 1 second delay after reading
 
             # note that url message is returned to keep it over several cylcles
             # in whilst we wait for an answer
-            (expecting_url, expecting_reaction, parsed_url_message) = \
-                activities.event_consumer(
-                    expecting_url,
-                    expecting_reaction,
-                    parsed_url_message,
-                    slack_client,
-                    fb_credentials,
-                    firebase)
+            (expecting_url, parsed_url_message) = activities.event_consumer(
+                                                        expecting_url,
+                                                        parsed_url_message,
+                                                        slack_client,
+                                                        fb_credentials,
+                                                        firebase)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")

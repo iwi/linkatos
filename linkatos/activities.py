@@ -12,14 +12,14 @@ def is_url(url_message):
     return url_message['type'] == 'url'
 
 
-def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
-                   slack_client, fb_credentials, firebase):
+def event_consumer(expecting_url, parsed_url_message, slack_client,
+                   fb_credentials, firebase):
 
     # Read slack events
     events = slack_client.rtm_read()
 
     if is_empty(events):
-        return (expecting_url, expecting_reaction, parsed_url_message)
+        return (expecting_url, parsed_url_message)
 
     for event in events:
         print(event)
@@ -42,4 +42,4 @@ def event_consumer(expecting_url, expecting_reaction, parsed_url_message,
                              fb_credentials, firebase)
                 expecting_url = True
 
-    return (expecting_url, expecting_reaction, parsed_url_message)
+    return (expecting_url, parsed_url_message)
