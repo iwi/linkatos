@@ -7,7 +7,7 @@ def parse_url_message(event):
     if url is None:
         return None
 
-    url_message = {
+    url_cache = {
         'url': url,
         'channel': event['channel'],
         'id': event['ts'],
@@ -15,7 +15,7 @@ def parse_url_message(event):
         'user': event['user']
     }
 
-    return url_message
+    return url_cache
 
 
 def parse_reaction_added(event):
