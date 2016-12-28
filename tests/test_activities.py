@@ -1,5 +1,5 @@
 import pytest
-import linkatos.activities as activities
+from . import activities
 
 
 def test_none_event():

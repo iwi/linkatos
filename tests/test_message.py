@@ -1,9 +1,8 @@
 import pytest
-import linkatos.message as message
+from . import message
 
 
 # test url detection
-
 def test_basic_url_detection_of_https():
     expected = "https://example.org"
     text = "foo <https://example.org>"

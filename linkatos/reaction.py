@@ -1,4 +1,4 @@
-import linkatos.firebase as fb
+from . import firebase as fb
 
 
 def positive_reaction(reaction):
