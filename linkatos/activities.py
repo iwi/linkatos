@@ -16,6 +16,10 @@ def is_reaction(index):
     return index is not None
 
 
+def remove_url_from(url_cache_list, index):
+    url_cache_list.pop(index)
+
+
 def event_consumer(expecting_url, url_cache_list, slack_client,
                    fb_credentials, firebase):
     # Read slack events
@@ -42,6 +46,6 @@ def event_consumer(expecting_url, url_cache_list, slack_client,
             if is_reaction(index):
                 react.handle(reaction['reaction'], url_cache_list[index]['url'],
                              fb_credentials, firebase)
-                remove_url_from(url_cache_list)
+                remove_url_from(url_cache_list, index)
 
-    return (expecting_url, url_cache)
+    return (expecting_url, url_cache_list)
