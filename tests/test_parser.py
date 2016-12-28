@@ -2,62 +2,50 @@ import pytest
 import linkatos.parser as parser
 
 
-# test message parsing
-def test_ignore_linkatos_message():
-    input_example = [{
-        'user': 'bot_id',
-        'channel': 'channel',
-        'text': 'http://example.org'
-    }]
-
-    output = {'out': None, 'channel': None, 'type': None}
-
-    assert parser.parse(input_example, 'bot_id') == output
-
-
-def test_is_of_url_type():
-    input_example = [{
-         'channel': 'channel',
-         'text': '<http://example.org>',
-         'user': 'user'
-    }]
-
-    output = {'out': 'http://example.org', 'channel': 'channel', 'type': 'url'}
-
-    assert parser.parse(input_example, 'bot_id') == output
+def test_parse_reaction_added():
+    event = {
+        'reaction': '+1',
+        'channel': 'example_channel',
+        'item': {
+            'channel': 'example_channel',
+            'ts': 1234.1234
+        },
+        'user': 'example_user',
+        'item_user': 'example_item_user'
+    }
+    reaction = {
+        'reaction': '+1',
+        'channel': 'example_channel',
+        'to_id': 1234.1234,
+        'type': 'reaction',
+        'user': 'example_user',
+        'to_user': 'example_item_user'
+    }
+    assert parser.parse_reaction_added(event) == reaction
 
 
-def test_is_of_ynanswer_type_yes():
-    input_example = [{
-         'channel': 'channel',
-         'text': 'yes',
-         'user': 'user'
-    }]
-
-    output = {'out': True, 'channel': 'channel', 'type': 'yn_answer'}
-
-    assert parser.parse(input_example, 'bot_id') == output
-
-
-def test_is_of_ynanswer_type_no():
-    input_example = [{
-         'channel': 'channel',
-         'text': 'No',
-         'user': 'user'
-    }]
-
-    output = {'out': False, 'channel': 'channel', 'type': 'yn_answer'}
-
-    assert parser.parse(input_example, 'bot_id') == output
+def test_parse_url():
+    event = {
+        'text': '<http://foo.bar>',
+        'channel': 'example_channel',
+        'ts': 1234.1234,
+        'user': 'example_user'
+    }
+    parsed_url = {
+        'url': 'http://foo.bar',
+        'channel': 'example_channel',
+        'id': 1234.1234,
+        'type': 'url',
+        'user': 'example_user'
+    }
+    assert parser.parse_url_message(event) == parsed_url
 
 
-def test_channelin_channelout():
-    input_example = [{
-         'channel': 'channel_in',
-         'text': 'yes',
-         'user': 'user'
-    }]
-
-    output = {'out': True, 'channel': 'channel_in', 'type': 'yn_answer'}
-
-    assert parser.parse(input_example, 'bot_id') == output
+def test_empty_message():
+    event = {
+        'text': 'not a url',
+        'channel': 'example_channel',
+        'ts': 1234.1234,
+        'user': 'example_user'
+    }
+    assert parser.parse_url_message(event) is None

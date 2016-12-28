@@ -1,45 +1,44 @@
-import time
 import linkatos.parser as parser
-import linkatos.confirmation as confirmation
 import linkatos.printer as printer
-import linkatos.utils as utils
 import linkatos.firebase as fb
+import linkatos.reaction as react
 
 
-def keep_wanted_urls(expecting_confirmation, url, slack_client, BOT_ID,
-                     fb_credentials, firebase):
-    READ_WEBSOCKET_DELAY = 1  # 1 second delay between reading from firehose
+def is_empty(events):
+    return ((events is None) or (len(events) == 0))
 
-    # parse the messages. Get a dictionary with @out, @channel,
-    # @out_type
-    parsed_message = parser.parse(slack_client.rtm_read(), BOT_ID)
 
-    print(parsed_message)
-    print(expecting_confirmation)
+def is_url(url_cache):
+    return url_cache is not None
 
-    if utils.is_fresh_url(expecting_confirmation, parsed_message['type']):
-        url = parsed_message['out']
+def event_consumer(expecting_url, url_cache, slack_client,
+                   fb_credentials, firebase):
 
-    print(url)
+    # Read slack events
+    events = slack_client.rtm_read()
 
-    printer.ask_confirmation(expecting_confirmation, parsed_message, slack_client)
+    if is_empty(events):
+        return (expecting_url, url_cache)
 
-    # update expecting_confirmation
-    # when it's a url
-    expecting_confirmation = confirmation.update_if_url(parsed_message,
-                                                        expecting_confirmation)
+    for event in events:
+        print(event)
+        print('expecting_url: ', expecting_url)
 
-    # check if there is an answer
-    (expecting_confirmation, is_yes) = confirmation.process_if_yn(parsed_message,
-                                                                  expecting_confirmation)
+        if expecting_url and event['type'] == 'message':
+            url_cache = parser.parse_url_message(event)
 
-    # printer.notify_confirmation(expecting_confirmation, is_yes)
+            if url_cache is not None:
+                printer.ask_confirmation(url_cache, slack_client)
+                expecting_url = False
 
-    # Store url
-    if is_yes:
-        fb.connect_and_store_url(url, fb_credentials, firebase)
-        is_yes = False
+        if not expecting_url and event['type'] == 'reaction_added':
+            reaction = parser.parse_reaction_added(event)
 
-    time.sleep(READ_WEBSOCKET_DELAY)
+            if react.is_confirmation(reaction['reaction'],
+                                     url_cache['id'],
+                                     reaction['to_id']):
+                react.handle(reaction['reaction'], url_cache['url'],
+                             fb_credentials, firebase)
+                expecting_url = True
 
-    return (expecting_confirmation, url)
+    return (expecting_url, url_cache)
