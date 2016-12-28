@@ -29,7 +29,7 @@ if __name__ == '__main__':
 
     # verify linkatos connection
     if slack_client.rtm_connect():
-        url_cache = {}
+        url_cache = []
         expecting_url = True
 
         while True:
