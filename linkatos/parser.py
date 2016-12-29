@@ -27,4 +27,20 @@ def parse_reaction_added(event):
         'user': event['user'],
         'to_user': event['item_user']
     }
+
     return reaction
+
+
+def parse_linkatos_message(event):
+    message = message.extract_list(event['text'])
+
+    if message is None:
+        return None
+
+    linkatos_message = {
+        'message' = message,
+        'channel' = event['channel'],
+        'type' = 'list'
+    }
+
+    return linkatos_message
