@@ -1,5 +1,5 @@
 import pytest
-from . import parser
+from linkatos import parser
 
 
 def test_parse_reaction_added():

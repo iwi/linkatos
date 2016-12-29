@@ -1,5 +1,5 @@
 import pytest
-from . import message
+from linkatos import message
 
 
 # test url detection
