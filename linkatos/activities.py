@@ -1,7 +1,7 @@
-import linkatos.parser as parser
-import linkatos.printer as printer
-import linkatos.firebase as fb
-import linkatos.reaction as react
+from . import parser
+from . import printer
+from . import firebase as fb
+from . import reaction as react
 
 
 def is_empty(events):

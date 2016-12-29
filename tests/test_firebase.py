@@ -1,5 +1,5 @@
 import pytest
-import linkatos.firebase as fb
+from linkatos import firebase as fb
 
 
 def test_to_data():

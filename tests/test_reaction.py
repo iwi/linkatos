@@ -1,5 +1,5 @@
 import pytest
-import linkatos.reaction as react
+from linkatos import reaction as react
 
 
 def test_positive_reaction():

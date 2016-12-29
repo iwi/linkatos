@@ -1,4 +1,4 @@
-import linkatos.message as message
+from . import message
 
 
 def parse_url_message(event):
