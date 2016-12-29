@@ -10,7 +10,7 @@ def known_reaction(reaction):
 
 
 def get_index(url_cache_list, reaction_to_id):
-    for index in xrange(0, len(url_cache_list) - 1):
+    for index in range(0, len(url_cache_list) - 1):
         if url_cache_list[index]['id'] == reaction_to_id:
             return index
 

@@ -41,7 +41,7 @@ def event_consumer(expecting_url, url_cache_list, slack_client,
         if event['type'] == 'reaction_added':
             reaction = parser.parse_reaction_added(event)
             index = react.is_confirmation(reaction['reaction'], url_cache_list,
-                                          reaction['to_id']):
+                                          reaction['to_id'])
 
             if is_reaction(index):
                 react.handle(reaction['reaction'], url_cache_list[index]['url'],
