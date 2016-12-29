@@ -31,16 +31,13 @@ def parse_reaction_added(event):
     return reaction
 
 
-def parse_linkatos_message(event):
-    message = message.extract_list(event['text'])
-
-    if message is None:
+def parse_list_request(event, bot_id):
+    if not message.is_list_request(event['text'], bot_id):
         return None
 
-    linkatos_message = {
-        'message' = message,
+    list_request = {
         'channel' = event['channel'],
-        'type' = 'list'
+        'type' = 'list_request'
     }
 
-    return linkatos_message
+    return list_request
