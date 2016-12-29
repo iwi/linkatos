@@ -33,8 +33,6 @@ def event_consumer(url_cache_list, slack_client, bot_id,
         return url_cache_list
 
     for event in events:
-        print('event: ', event)
-
         if event['type'] == 'message':
             new_url_cache = parser.parse_url_message(event)
 
@@ -43,14 +41,10 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                 url_cache_list.append(new_url_cache)
                 printer.ask_confirmation(new_url_cache, slack_client)
 
-        print('url_cache_list: ', url_cache_list)
-
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
             index = react.is_confirmation(reaction['reaction'], url_cache_list,
                                           reaction['to_id'])
-
-            print('index: ', index)
 
             if is_expected_reaction(index):
                 react.handle(reaction['reaction'], url_cache_list[index]['url'],
