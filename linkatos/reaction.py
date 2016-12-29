@@ -29,3 +29,7 @@ def is_confirmation(reaction, url_cache_list, reaction_to_id):
         return None
 
     return get_index(url_cache_list, reaction_to_id)
+
+
+def is_expected_reaction(index):
+    return index is not None

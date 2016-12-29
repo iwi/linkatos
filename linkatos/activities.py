@@ -12,10 +12,6 @@ def is_url(url_cache):
     return url_cache is not None
 
 
-def is_expected_reaction(index):
-    return index is not None
-
-
 def remove_url_from(url_cache_list, index):
     url_cache_list.pop(index)
 
@@ -46,7 +42,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
             index = react.is_confirmation(reaction['reaction'], url_cache_list,
                                           reaction['to_id'])
 
-            if is_expected_reaction(index):
+            if react.is_expected_reaction(index):
                 react.handle(reaction['reaction'], url_cache_list[index]['url'],
                              fb_credentials, firebase)
                 remove_url_from(url_cache_list, index)
