@@ -7,6 +7,21 @@ This slackbot:
   - Captures the detected urls into a database
 
 
+## Features
+
+When the bot is invited to a channel it automatically caches the urls that are
+posted.
+
+Use a :+1: reaction to the message where the url was posted the bot stores the
+url into a Firebase database.
+
+Use a :-1: reaction to the message where the url was posted the bot ignores
+that url.
+
+Use `@linkatos list` to ask linkatos to list all cached urls that have not yet
+been stored or ignored.
+
+
 ## Running the bot
 
 To run the bot in isolation use the Dockerised version:
