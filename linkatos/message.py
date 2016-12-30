@@ -18,10 +18,17 @@ def to_bot(message, bot_id):
     # to find a message to the bot
     bot_re = "^<@" + bot_id + '>'
     to_bot_re = re.compile(bot_re)
+    bot_found = to_bot_re.search(message)
+    if bot_found is None:
+        return False
 
-    return to_bot_re.search(message).group(0) is not None
+    return bot_found.group(0) is not None
 
 
 def is_list_request(message):
     list_re = re.compile("list")
-    return list_re.search(message).group(0) == 'list'
+    list_found = list_re.search(message)
+    if list_found is None:
+        return False
+
+    return list_found.group(0) == 'list'

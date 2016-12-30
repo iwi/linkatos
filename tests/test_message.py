@@ -66,3 +66,19 @@ def test_to_bot():
     text = '<@bot_id>'
     bot_id = 'bot_id'
     assert message.to_bot(text, bot_id) is True
+
+
+def test_not_to_bot():
+    text = '<@not_bot_id>'
+    bot_id = 'bot_id'
+    assert message.to_bot(text, bot_id) is False
+
+
+def test_is_list():
+    text = 'list'
+    assert message.is_list_request(text) is True
+
+
+def test_is_not_list():
+    text = 'lOst'
+    assert message.is_list_request(text) is False
