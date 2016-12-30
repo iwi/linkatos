@@ -2,6 +2,7 @@ import re
 
 url_re = re.compile("(?:\s|^)<(https?://[\w./?+&+%$!#=\-_]+)>(?:\s|$)")
 
+
 def extract_url(message):
     """
     Returns the first url in a message. If there aren't any returns None
