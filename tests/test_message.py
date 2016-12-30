@@ -60,3 +60,9 @@ def test_detection_of_http_in_the_middle():
 def test_message_does_not_have_a_url():
     text = "foo <htts://no_url_example.org>"
     assert message.extract_url(text) is None
+
+
+def test_to_bot():
+    text = '<@bot_id>'
+    bot_id = 'bot_id'
+    assert message.to_bot(text, bot_id) is True
