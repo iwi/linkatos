@@ -34,14 +34,11 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                 url_cache_list.append(new_url_cache)
                 printer.ask_confirmation(new_url_cache, slack_client)
 
-            if parser.message_to_bot(event, bot_id):
+            if message.to_bot(event, bot_id):
+                list_request = parser.parse_list_request(event, bot_id)
 
-
-
-            list_request = parser.parse_list_request(event, bot_id)
-
-            if list_request['type'] == 'list':
-                printer.list_cached_urls(url_cache_list, list_request['channel'])
+                if list_request['type'] == 'list':
+                    printer.list_cached_urls(url_cache_list, list_request['channel'])
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)

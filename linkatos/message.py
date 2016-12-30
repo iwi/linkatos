@@ -22,11 +22,6 @@ def to_bot(message, bot_id):
     return to_bot_re.search(message).group(0) is not None
 
 
-def is_list_request(message, bot_id):
-    to_bot = to_bot(message, bot_id)
-
-    # to find out if it says list
+def is_list_request(message):
     list_re = re.compile("list")
-    is_list = list_re.search(message).group(0) == 'list'
-
-    return to_linkatos and is_list
+    return list_re.search(message).group(0) == 'list'

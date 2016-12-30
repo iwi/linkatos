@@ -31,13 +31,13 @@ def parse_reaction_added(event):
     return reaction
 
 
-def parse_list_request(event, bot_id):
-    if not message.is_list_request(event['text'], bot_id):
+def parse_list_request(event):
+    if not message.is_list_request(event['text']):
         return None
 
     list_request = {
-        'channel' = event['channel'],
-        'type' = 'list_request'
+        'channel': event['channel'],
+        'type': 'list_request'
     }
 
     return list_request
