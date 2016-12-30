@@ -28,3 +28,13 @@ def is_list_request(message):
     list_found = list_re.search(message)
 
     return list_found is not None
+
+
+def purge_request(message):
+    purge_re = re.compile("(purge) (\d+)")
+    index_found = purge_re.search(message)
+
+    if index_found is None:
+        return None
+
+    return int(index_found.group(2))

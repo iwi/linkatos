@@ -43,11 +43,15 @@ def event_consumer(url_cache_list, slack_client, bot_id,
 
             if message.to_bot(event['text'], bot_id):
                 list_request = parser.parse_list_request(event)
+                purge_request = parser.parse_purge_request(event)
 
                 if 'type' in list_request and list_request['type'] == 'list_request':
                     printer.list_cached_urls(url_cache_list,
                                              list_request['channel'],
                                              slack_client)
+
+                if purge_request['type'] == 'purge_request':
+                    remove_url_from(url_cache_list, purge_request['index'] - 1)
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
