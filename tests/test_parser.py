@@ -49,3 +49,17 @@ def test_empty_message():
         'user': 'example_user'
     }
     assert parser.parse_url_message(event) is None
+
+
+def test_parse_list_request():
+    event = {
+        'text': '<@bot_id> list',
+        'channel': 'example_channel',
+        'ts': 1234.1234,
+        'user': 'example_user'
+    }
+    parsed_list_request = {
+        'channel': 'example_channel',
+        'type': 'list_request',
+    }
+    assert parser.parse_list_request(event) == parsed_list_request
