@@ -14,3 +14,22 @@ def ask_confirmation(message, slack_client):
     bot_says(message['channel'],
              compose_explanation(message['url']),
              slack_client)
+
+
+def compose_url_list(url_cache_list):
+    if len(url_cache_list) == 0:
+        return "The list is empty"
+
+    list_message = "The list of urls to be confirmed is: \n"
+
+    for index in range(0, len(url_cache_list)):
+        extra = "{} - {} \n".format(index, url_cache_list[index]['url'])
+        list_message = list_message + extra
+
+    return list_message
+
+
+def list_cached_urls(url_cache_list, channel, slack_client):
+    bot_says(channel,
+             compose_url_list(url_cache_list),
+             slack_client)

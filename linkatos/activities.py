@@ -2,6 +2,7 @@ from . import parser
 from . import printer
 from . import firebase as fb
 from . import reaction as react
+from . import message
 
 
 def is_empty(events):
@@ -38,7 +39,9 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                 list_request = parser.parse_list_request(event, bot_id)
 
                 if list_request['type'] == 'list':
-                    printer.list_cached_urls(url_cache_list, list_request['channel'])
+                    printer.list_cached_urls(url_cache_list,
+                                             list_request['channel'],
+                                             slack_client)
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
