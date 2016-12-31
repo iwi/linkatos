@@ -16,6 +16,9 @@ def is_url(url_cache):
 def is_not_from_bot(bot_id, user_id):
     return not bot_id == user_id
 
+def is_empty_list(url_cache_list):
+    return len(url_cache_list) == 0
+
 
 def is_unfurled(event):
     return 'previous_message' in event
@@ -50,7 +53,8 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                                              list_request['channel'],
                                              slack_client)
 
-                if purge_request['type'] == 'purge_request':
+                if purge_request['type'] == 'purge_request' and \
+                   not is_empty_list(url_cache_list):
                     remove_url_from(url_cache_list, purge_request['index'] - 1)
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
@@ -58,6 +62,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
 
             if react.is_known(reaction['reaction']):
                 selected_url_cache = react.extract_url_cache(url_cache_list,
+                                                             reaction['to_id'])
                 react.handle(reaction['reaction'], selected_url_cache['url'],
                              fb_credentials, firebase)
 
