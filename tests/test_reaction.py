@@ -49,13 +49,7 @@ def test_different_ids():
     assert react.get_index(url_cache_list, id_two) is None
 
 
-def test_confirmation():
+def test_is_expected_reaction():
+    index = 1
     reaction = '+1'
-    url_cache_list = [
-        {'id': 'a'},
-        {'id': 'b'},
-        {'id': 'c'},
-        {'id': 'd'},
-    ]
-    reaction_to_id = 'c'
-    assert react.is_confirmation(reaction, url_cache_list, reaction_to_id) is 2
+    assert react.is_expected_reaction(index, reaction) is True

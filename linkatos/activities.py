@@ -39,10 +39,9 @@ def event_consumer(url_cache_list, slack_client, bot_id,
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
-            index = react.is_confirmation(reaction['reaction'], url_cache_list,
-                                          reaction['to_id'])
+            index = react.get_index(url_cache_list, reaction['to_id'])
 
-            if react.is_expected_reaction(index):
+            if react.is_expected_reaction(index, reaction['reaction']):
                 react.handle(reaction['reaction'], url_cache_list[index]['url'],
                              fb_credentials, firebase)
                 remove_url_from(url_cache_list, index)

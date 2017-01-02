@@ -21,15 +21,8 @@ def get_index(url_cache_list, reaction_to_id):
 def handle(reaction, url, fb_credentials, firebase):
     if positive_reaction(reaction):
         fb.connect_and_store_url(url, fb_credentials, firebase)
-    # printer.add_stored_reaction(url_cache)
+    printer.add_stored_reaction(url_cache)
 
 
-def is_confirmation(reaction, url_cache_list, reaction_to_id):
-    if not known_reaction(reaction):
-        return None
-
-    return get_index(url_cache_list, reaction_to_id)
-
-
-def is_expected_reaction(index):
-    return index is not None
+def is_expected_reaction(index, reaction):
+    return index is not None and known_reaction(reaction)
