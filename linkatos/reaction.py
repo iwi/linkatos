@@ -5,14 +5,16 @@ def positive_reaction(reaction):
     return reaction == '+1'
 
 
-def known_reaction(reaction):
+def is_known(reaction):
     return reaction in ['+1', '-1']
 
 
-def get_index(url_cache_list, reaction_to_id):
+def extract_url_cache(url_cache_list, reaction_to_id):
     for index in range(0, len(url_cache_list)):
         if url_cache_list[index]['id'] == reaction_to_id:
-            return index
+            url_cache = url_cache_list[index]
+            url_cache_list.pop(index)
+            return url_cache
 
     # if not found
     return None
@@ -21,7 +23,3 @@ def get_index(url_cache_list, reaction_to_id):
 def handle(reaction, url, fb_credentials, firebase):
     if positive_reaction(reaction):
         fb.connect_and_store_url(url, fb_credentials, firebase)
-
-
-def is_expected_reaction(index, reaction):
-    return index is not None and known_reaction(reaction)

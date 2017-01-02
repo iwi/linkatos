@@ -12,10 +12,6 @@ def is_url(url_cache):
     return url_cache is not None
 
 
-def remove_url_from(url_cache_list, index):
-    url_cache_list.pop(index)
-
-
 def is_not_from_bot(bot_id, user_id):
     return not bot_id == user_id
 
@@ -39,11 +35,11 @@ def event_consumer(url_cache_list, slack_client, bot_id,
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
-            index = react.get_index(url_cache_list, reaction['to_id'])
 
-            if react.is_expected_reaction(index, reaction['reaction']):
-                react.handle(reaction['reaction'], url_cache_list[index]['url'],
+            if react.is_known(reaction['reaction']):
+                selected_url_cache = react.extract_url_cache(url_cache_list,
+                                                             reaction['to_id'])
+                react.handle(reaction['reaction'], selected_url_cache['url'],
                              fb_credentials, firebase)
-                remove_url_from(url_cache_list, index)
 
     return url_cache_list
