@@ -21,7 +21,6 @@ def get_index(url_cache_list, reaction_to_id):
 def handle(reaction, url, fb_credentials, firebase):
     if positive_reaction(reaction):
         fb.connect_and_store_url(url, fb_credentials, firebase)
-    printer.add_stored_reaction(url_cache)
 
 
 def is_expected_reaction(index, reaction):
