@@ -17,6 +17,23 @@ def is_not_from_bot(bot_id, user_id):
     return not bot_id == user_id
 
 
+def is_unfurled(event):
+    return 'previous_message' in event
+
+
+def fix_unfurled_id(url_cache_list, event):
+    url_cache = react.extract_url_cache(url_cache_list, event['previous_message']['ts'])
+    new_url_cache = {
+            'url': url_cache['url'],
+            'channel': url_cache['channel'],
+            'id': event['ts'],
+            'type': 'url',
+            'user': url_cache['user']
+        }
+    url_cache_list.append(new_url_cache)
+    return url_cache_list
+
+
 def event_consumer(url_cache_list, slack_client, bot_id,
                    fb_credentials, firebase):
     # Read slack events
@@ -26,7 +43,11 @@ def event_consumer(url_cache_list, slack_client, bot_id,
         return url_cache_list
 
     for event in events:
-        if event['type'] == 'message':
+        if is_unfurled(event):
+            url_cache_list = fix_unfurled_id(url_cache_list, event)
+            return url_cache_list
+
+        if event['type'] == 'message' and not 'username' in event:
             new_url_cache = parser.parse_url_message(event)
 
             if is_url(new_url_cache) and is_not_from_bot(bot_id,
