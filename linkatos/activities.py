@@ -55,14 +55,15 @@ def event_consumer(url_cache_list, slack_client, bot_id,
 
                 if purge_request['type'] == 'purge_request' and \
                    not is_empty_list(url_cache_list):
-                    remove_url_from(url_cache_list, purge_request['index'] - 1)
+                    react.extract_url_cache_by_index(url_cache_list,
+                                                     purge_request['index'] - 1)
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
 
             if react.is_known(reaction['reaction']):
-                selected_url_cache = react.extract_url_cache(url_cache_list,
-                                                             reaction['to_id'])
+                selected_url_cache = react.extract_url_cache_by_id(url_cache_list,
+                                                                   reaction['to_id'])
                 react.handle(reaction['reaction'], selected_url_cache['url'],
                              fb_credentials, firebase)
 

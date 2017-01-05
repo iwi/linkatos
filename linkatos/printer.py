@@ -21,7 +21,7 @@ def compose_url_list(url_cache_list):
         return "The list is empty"
 
     intro = "The list of urls to be confirmed is: \n"
-    options = ["{} - {}".format(i, v['url']) for i, v in enumerate(url_cache_list)]
+    options = ["{} - {}".format(i + 1, v['url']) for i, v in enumerate(url_cache_list)]
 
     return intro + "\n".join(options)
 
