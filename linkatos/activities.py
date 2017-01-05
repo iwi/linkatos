@@ -54,7 +54,6 @@ def event_consumer(url_cache_list, slack_client, bot_id,
 
             if react.is_known(reaction['reaction']):
                 selected_url_cache = react.extract_url_cache(url_cache_list,
-                                                             reaction['to_id'])
                 react.handle(reaction['reaction'], selected_url_cache['url'],
                              fb_credentials, firebase)
 
