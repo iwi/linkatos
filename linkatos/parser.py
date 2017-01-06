@@ -50,7 +50,8 @@ def parse_purge_request(event):
 
     purge_request = {
         'index': index,
-        'type': 'purge_request'
+        'type': 'purge_request',
+        'channel': event['channel']
     }
 
     return purge_request

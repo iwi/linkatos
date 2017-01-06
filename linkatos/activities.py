@@ -57,6 +57,9 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                    not is_empty_list(url_cache_list):
                     react.extract_url_cache_by_index(url_cache_list,
                                                      purge_request['index'] - 1)
+                    printer.list_cached_urls(url_cache_list,
+                                             purge_request['channel'],
+                                             slack_client)
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
