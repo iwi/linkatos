@@ -20,13 +20,10 @@ def compose_url_list(url_cache_list):
     if len(url_cache_list) == 0:
         return "The list is empty"
 
-    list_message = "The list of urls to be confirmed is: \n"
+    intro = "The list of urls to be confirmed is: \n"
+    options = ["{} - {}".format(i, v['url']) for i, v in enumerate(url_cache_list)]
 
-    for index in range(0, len(url_cache_list)):
-        extra = "{} - {} \n".format(index, url_cache_list[index]['url'])
-        list_message = list_message + extra
-
-    return list_message
+    return intro + "\n".join(options)
 
 
 def list_cached_urls(url_cache_list, channel, slack_client):
