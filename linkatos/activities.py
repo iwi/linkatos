@@ -26,7 +26,6 @@ def event_consumer(url_cache_list, slack_client, bot_id,
         return url_cache_list
 
     for event in events:
-        print('event: ', event)
         if event['type'] == 'message':
             new_url_cache = parser.parse_url_message(event)
 
