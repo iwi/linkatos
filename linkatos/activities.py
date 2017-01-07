@@ -37,7 +37,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
             if message.to_bot(event['text'], bot_id):
                 list_request = parser.parse_list_request(event)
 
-                if list_request['type'] == 'list_request':
+                if 'type' in list_request and list_request['type'] == 'list_request':
                     printer.list_cached_urls(url_cache_list,
                                              list_request['channel'],
                                              slack_client)

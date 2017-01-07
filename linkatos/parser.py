@@ -33,7 +33,7 @@ def parse_reaction_added(event):
 
 def parse_list_request(event):
     if not message.is_list_request(event['text']):
-        return {'type': None}
+        return None
 
     list_request = {
         'channel': event['channel'],
