@@ -16,6 +16,7 @@ def is_url(url_cache):
 def is_not_from_bot(bot_id, user_id):
     return not bot_id == user_id
 
+
 def is_empty_list(url_cache_list):
     return len(url_cache_list) == 0
 
@@ -36,7 +37,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
         if is_unfurled(event):
             return url_cache_list
 
-        if event['type'] == 'message' and not 'username' in event:
+        if event['type'] == 'message' and 'username' not in event:
             new_url_cache = parser.parse_url_message(event)
 
             if is_url(new_url_cache) and is_not_from_bot(bot_id,

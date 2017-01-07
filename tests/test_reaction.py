@@ -49,6 +49,7 @@ def test_different_ids():
     id_two = 'e'
     assert react.extract_url_cache_by_id(url_cache_list, id_two) is None
 
+
 def test_found_index():
     url_cache_list = [
         {'id': 'a'},
@@ -56,9 +57,9 @@ def test_found_index():
         {'id': 'c'},
         {'id': 'd'},
     ]
-    index = 2
+    index = 2 - 1
     extracted = {'id': 'b'}
-    assert react.extract_url_cache_by_index(url_cache_list, index - 1) == extracted
+    assert react.extract_url_cache_by_index(url_cache_list, index) == extracted
 
 
 def test_out_of_bounds_index():
