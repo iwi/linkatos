@@ -44,6 +44,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                                                          new_url_cache['user']):
                 url_cache_list.append(new_url_cache)
                 printer.ask_confirmation(new_url_cache, slack_client)
+                return url_cache_list
 
             if message.to_bot(event['text'], bot_id):
                 list_request = parser.parse_list_request(event)
@@ -53,6 +54,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                     printer.list_cached_urls(url_cache_list,
                                              list_request['channel'],
                                              slack_client)
+                    return url_cache_list
 
                 if purge_request is not None and \
                    purge_request['type'] == 'purge_request' and \
@@ -62,6 +64,7 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                     printer.list_cached_urls(url_cache_list,
                                              purge_request['channel'],
                                              slack_client)
+                    return url_cache_list
 
         if event['type'] == 'reaction_added' and len(url_cache_list) > 0:
             reaction = parser.parse_reaction_added(event)
@@ -71,5 +74,6 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                                                                    reaction['to_id'])
                 react.handle(reaction['reaction'], selected_url_cache['url'],
                              fb_credentials, firebase)
+                return url_cache_list
 
     return url_cache_list
