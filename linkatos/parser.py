@@ -27,4 +27,17 @@ def parse_reaction_added(event):
         'user': event['user'],
         'to_user': event['item_user']
     }
+
     return reaction
+
+
+def parse_list_request(event):
+    if not message.is_list_request(event['text']):
+        return None
+
+    list_request = {
+        'channel': event['channel'],
+        'type': 'list_request'
+    }
+
+    return list_request
