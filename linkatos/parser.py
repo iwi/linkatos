@@ -46,7 +46,7 @@ def parse_list_request(event):
 def parse_purge_request(event):
     index = message.purge_request(event['text'])
     if index is None:
-        return {'type': None}
+        return None
 
     purge_request = {
         'index': index,

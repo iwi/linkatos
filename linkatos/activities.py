@@ -49,12 +49,13 @@ def event_consumer(url_cache_list, slack_client, bot_id,
                 list_request = parser.parse_list_request(event)
                 purge_request = parser.parse_purge_request(event)
 
-                if 'type' in list_request and list_request['type'] == 'list_request':
+                if list_request is not None and list_request['type'] == 'list_request':
                     printer.list_cached_urls(url_cache_list,
                                              list_request['channel'],
                                              slack_client)
 
-                if purge_request['type'] == 'purge_request' and \
+                if purge_request is not None and \
+                   purge_request['type'] == 'purge_request' and \
                    not is_empty_list(url_cache_list):
                     react.extract_url_cache_by_index(url_cache_list,
                                                      purge_request['index'] - 1)
