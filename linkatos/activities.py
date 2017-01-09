@@ -6,26 +6,66 @@ from . import message
 
 
 def is_empty(events):
+"""
+Checks if a batch of Slack events is `None` or has zero elements.
+"""
     return ((events is None) or (len(events) == 0))
 
 
 def is_url(element):
+"""
+Checks if the input is not `None`.
+The input is supposed to be a Slack event, but that's currently not verified.
+"""
     return element is not None
 
 
 def is_not_from_bot(bot_id, user_id):
+"""
+Compares two bot ids verifies they're different.
+"""
     return not bot_id == user_id
 
 
 def is_empty_list(xs):
+"""
+Checks if a list is empty.
+"""
     return len(xs) == 0
 
 
 def is_unfurled(event):
+"""
+Checks if a Slack event comes from unfurling a url.
+
+          Currently assumes that any such message can be identified by the fact that it
+          contains a _'previous_message'_ field.
+"""
     return 'previous_message' in event
 
 
 def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
+"""
+Consumes batches of slack events and runs the possible actions.
+
+Reads new batches of Slack events.
+Selects those events that need to be actioned.
+Actions events that:
+
+    - are of 'type' _message_ and
+        + contain a url
+        + and caches the url
+        + request a list of the cache
+        + and prints out the list
+
+    or
+
+    - are of 'type' _reaction_added_ to a cached url
+        + and either stores
+        + or ignores the url
+...
+
+"""
     # Read slack events
     events = slack_client.rtm_read()
 

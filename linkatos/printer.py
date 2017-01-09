@@ -1,4 +1,7 @@
 def bot_says(channel, text, slack_client):
+"""
+Posts some text to a specific slack channel.
+"""
     return slack_client.api_call("chat.postMessage",
                                  channel=channel,
                                  text=text,
@@ -6,17 +9,27 @@ def bot_says(channel, text, slack_client):
 
 
 def compose_explanation(url):
+"""
+Composes a message on how to store or ignore the url that has been added to the cache.
+"""
     return "If you would like {} to be stored please react to it with a :+1:, \
 if you would like it to be ignored use :-1:".format(url)
 
 
 def ask_confirmation(message, slack_client):
+"""
+Posts a confirmation message that was composed.
+"""
     bot_says(message['channel'],
              compose_explanation(message['url']),
              slack_client)
 
 
 def compose_list(url_list):
+"""
+Composes a response message to a request to list the cache with the list of
+elments in the cache.
+"""
     if len(url_list) == 0:
         return "The list is empty"
 
@@ -27,6 +40,9 @@ def compose_list(url_list):
 
 
 def list_cache(cache, channel, slack_client):
+"""
+Posts the list of elements in the cache to a specific channel in Slack.
+"""
     bot_says(channel,
              compose_list(cache),
              slack_client)
