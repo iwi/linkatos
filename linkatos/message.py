@@ -1,7 +1,8 @@
 import re
 
 url_re = re.compile("(?:\s|^)<(https?://[\w./?+&+%$!#=\-_]+)>(?:\s|$)")
-
+purge_re = re.compile("(purge) (\d+)")
+list_re = re.compile("list")
 
 def extract_url(message):
     """
@@ -24,14 +25,12 @@ def to_bot(message, bot_id):
 
 
 def is_list_request(message):
-    list_re = re.compile("list")
     list_found = list_re.search(message)
 
     return list_found is not None
 
 
 def purge_request(message):
-    purge_re = re.compile("(purge) (\d+)")
     index_found = purge_re.search(message)
 
     if index_found is None:
