@@ -1,10 +1,10 @@
 import re
 
+
 def extract_url(message):
-    """
-    Returns the first url in a message. If there aren't any returns None
-    """
-    answer = re.search("(?:\s|^)<(https?://[\w./?+&+%$!#=\-_]+)>(?:\s|$)", message)
+    # Returns the first url in a message. If there aren't any returns None
+    url_re = "(?:\s|^)<(https?://[\w./?+&+%$!#=\-_]+)>(?:\s|$)"
+    answer = re.search(url_re, message)
 
     if answer is not None:
         answer = answer.group(1).strip()
