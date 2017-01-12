@@ -21,6 +21,9 @@ that url.
 Use `@linkatos list` to ask linkatos to list all cached urls that have not yet
 been stored or ignored.
 
+Use `@linkatos purge <i>` to ask linkatos to remove the ith element from the
+cache as stated when running `@linkatos list`.
+
 
 ## Running the bot
 

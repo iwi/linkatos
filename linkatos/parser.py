@@ -41,3 +41,17 @@ def parse_list_request(event):
     }
 
     return list_request
+
+
+def parse_purge_request(event):
+    index = message.purge_request(event['text'])
+    if index is None:
+        return None
+
+    purge_request = {
+        'index': index,
+        'type': 'purge_request',
+        'channel': event['channel']
+    }
+
+    return purge_request
