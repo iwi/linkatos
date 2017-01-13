@@ -4,12 +4,12 @@ import re
 def extract_url(message):
     # Returns the first url in a message. If there aren't any returns None
     url_re = "(?:\s|^)<(https?://[\w./?+&+%$!#=\-_]+)>(?:\s|$)"
-    answer = re.search(url_re, message)
+    captures = re.search(url_re, message)
 
-    if answer is not None:
-        answer = answer.group(1).strip()
+    if captures is not None:
+        captures = captures.group(1).strip()
 
-    return answer
+    return captures
 
 
 def to_bot(message, bot_id):

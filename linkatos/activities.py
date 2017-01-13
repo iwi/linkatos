@@ -17,8 +17,8 @@ def is_not_from_bot(bot_id, user_id):
     return not bot_id == user_id
 
 
-def is_empty_list(ls):
-    return len(ls) == 0
+def is_empty_list(list):
+    return len(list) == 0
 
 
 def is_unfurled(event):
