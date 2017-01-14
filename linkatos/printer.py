@@ -16,17 +16,17 @@ def ask_confirmation(message, slack_client):
              slack_client)
 
 
-def compose_url_list(url_cache_list):
-    if len(url_cache_list) == 0:
+def compose_list(url_list):
+    if len(url_list) == 0:
         return "The list is empty"
 
     intro = "The list of urls to be confirmed is: \n"
-    options = ["{} - {}".format(i + 1, v['url']) for i, v in enumerate(url_cache_list)]
+    options = ["{} - {}".format(i + 1, v['url']) for i, v in enumerate(url_list)]
 
     return intro + "\n".join(options)
 
 
-def list_cached_urls(url_cache_list, channel, slack_client):
+def list_cache(cache, channel, slack_client):
     bot_says(channel,
-             compose_url_list(url_cache_list),
+             compose_list(cache),
              slack_client)

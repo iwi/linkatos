@@ -29,17 +29,17 @@ if __name__ == '__main__':
 
     # verify linkatos connection
     if slack_client.rtm_connect():
-        url_cache_list = []
+        cache = []
 
         while True:
             time.sleep(1)  # 1 second delay after reading
 
             # note that url message is returned to keep it over several cylcles
             # in whilst we wait for an answer
-            url_cache_list = activities.event_consumer(url_cache_list,
-                                                       slack_client,
-                                                       BOT_ID,
-                                                       fb_credentials,
-                                                       firebase)
+            cache = activities.event_consumer(cache,
+                                              slack_client,
+                                              BOT_ID,
+                                              fb_credentials,
+                                              firebase)
     else:
         print("Connection failed. Invalid Slack token or bot ID?")
