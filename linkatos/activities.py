@@ -3,7 +3,7 @@ from . import printer
 from . import firebase as fb
 from . import reaction as react
 from . import message
-
+from . import cache as cch
 
 def is_empty(events):
 """
@@ -12,34 +12,12 @@ Checks if a batch of Slack events is `None` or has zero elements.
     return ((events is None) or (len(events) == 0))
 
 
-def is_url(element):
-"""
-Checks if the input is not `None`.
-The input is supposed to be a Slack event, but that's currently not verified.
-"""
-    return element is not None
-
-
-def is_not_from_bot(bot_id, user_id):
-"""
-Compares two bot ids verifies they're different.
-"""
-    return not bot_id == user_id
-
-
-def is_empty_list(xs):
-"""
-Checks if a list is empty.
-"""
-    return len(xs) == 0
-
-
 def is_unfurled(event):
 """
 Checks if a Slack event comes from unfurling a url.
 
-          Currently assumes that any such message can be identified by the fact that it
-          contains a _'previous_message'_ field.
+Currently assumes that any such message can be identified by the fact that it
+contains a 'previous_message' field.
 """
     return 'previous_message' in event
 
@@ -50,21 +28,14 @@ Consumes batches of slack events and runs the possible actions.
 
 Reads new batches of Slack events.
 Selects those events that need to be actioned.
-Actions events that:
-
-    - are of 'type' _message_ and
-        + contain a url
-        + and caches the url
-        + request a list of the cache
-        + and prints out the list
-
-    or
-
-    - are of 'type' _reaction_added_ to a cached url
-        + and either stores
-        + or ignores the url
-...
-
+Actionable events are:
+    - of 'type' message and contain a url
+    - are of 'type' reaction_added and respond to a cached url with either a
+    :+1: or a :-1:
+    - of 'type' message and are either:
+        + @linkatos list
+        + @linkatos purge <i>
+        where <i> is the ith element of the cache
 """
     # Read slack events
     events = slack_client.rtm_read()
@@ -79,10 +50,8 @@ Actions events that:
         if event['type'] == 'message' and 'username' not in event:
             new_url = parser.parse_url_message(event)
 
-            if is_url(new_url) and is_not_from_bot(bot_id, new_url['user']):
-                cache.append(new_url)
-                printer.ask_confirmation(new_url, slack_client)
-                return cache
+            if cch.is_url(new_url) and is_not_from_bot(bot_id, new_url['user']):
+                return cch.add(new_url, cache, slack_client)
 
             if message.to_bot(event['text'], bot_id):
                 list_request = parser.parse_list_request(event)
