@@ -37,12 +37,3 @@ elments in the cache.
     options = ["{} - {}".format(i + 1, v['url']) for i, v in enumerate(url_list)]
 
     return intro + "\n".join(options)
-
-
-def list_cache(cache, channel, slack_client):
-"""
-Posts the list of elements in the cache to a specific channel in Slack.
-"""
-    bot_says(channel,
-             compose_list(cache),
-             slack_client)

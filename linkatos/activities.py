@@ -66,19 +66,19 @@ Actionable events are:
                 if purge_request is not None and \
                    purge_request['type'] == 'purge_request' and \
                    not is_empty_list(cache):
-                    react.extract_url_by_index(cache,
-                                               purge_request['index'] - 1)
-                    printer.list_cached(cache,
-                                        purge_request['channel'],
-                                        slack_client)
+                    cch.extract_url_by_index(cache,
+                                             purge_request['index'] - 1)
+                    cch.display(cache,
+                                purge_request['channel'],
+                                slack_client)
                     return cache
 
         if event['type'] == 'reaction_added' and len(cache) > 0:
             reaction = parser.parse_reaction_added(event)
 
             if react.is_known(reaction['reaction']):
-                selected_url = react.extract_url_by_id(cache,
-                                                       reaction['to_id'])
+                selected_url = cch.extract_url_by_id(cache,
+                                                     reaction['to_id'])
                 react.handle(reaction['reaction'], selected_url['url'],
                              fb_credentials, firebase)
                 return cache
