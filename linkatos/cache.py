@@ -1,22 +1,5 @@
 from . import printer
 
-def is_url(element):
-"""
-Checks if the input is not `None`.
-The input is supposed to be a Slack event, but that's currently not verified.
-"""
-    return element is not None
-
-
-def is_not_from_bot(bot_id, user_id):
-"""
-Compares two bot ids and verifies that they're different.
-
-is this really necessary??
-"""
-    return not bot_id == user_id
-
-
 def is_empty(xs):
 """
 Checks if the cache is empty. Currently the cache is implemented as a list

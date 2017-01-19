@@ -12,6 +12,24 @@ Checks if a batch of Slack events is `None` or has zero elements.
     return ((events is None) or (len(events) == 0))
 
 
+def is_new(element, bot_id):
+"""
+Checks if there is a new element(url) by verifying that is  not `None` and that
+it is not from the bot.
+The input is supposed to be a Slack event, but that's currently not verified.
+"""
+    return element is not None and is_not_from_bot(bot_id, element['user'])
+
+
+def is_not_from_bot(bot_id, user_id):
+"""
+Compares two bot ids and verifies that they're different.
+
+is this really necessary??
+"""
+    return not bot_id == user_id
+
+
 def is_unfurled(event):
 """
 Checks if a Slack event comes from unfurling a url.
@@ -48,10 +66,10 @@ Actionable events are:
             return cache
 
         if event['type'] == 'message' and 'username' not in event:
-            new_url = parser.parse_url_message(event)
+            url = parser.parse_url_message(event)
 
-            if cch.is_url(new_url) and is_not_from_bot(bot_id, new_url['user']):
-                return cch.add(new_url, cache, slack_client)
+            if is_new(url):
+                return cch.add(url, cache, slack_client)
 
             if message.to_bot(event['text'], bot_id):
                 list_request = parser.parse_list_request(event)

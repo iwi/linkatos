@@ -1,6 +1,5 @@
 from . import message
 
-
 def parse_url_message(event):
 """
 When there is a url in a Slack event builds an object of type 'url'
