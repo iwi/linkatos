@@ -27,7 +27,8 @@ therefore it's only necessary to check if the list is empty.
 
 def add(element, cache, slack_client):
 """
-Adds an element to the cache.
+Adds an element to the cache, appending it to the end of it.
+And sends a message requesting confirmation.
 """
     cache.append(element)
     printer.ask_confirmation(element, slack_client)
@@ -65,7 +66,7 @@ Extracts a url from the cache based on its position in it.
 
 def display(cache, channel, slack_client):
 """
-Posts the list of elements in the cache to a specific channel in Slack.
+Displays the list of elements in the cache to a specific channel in Slack.
 """
     printer.bot_says(channel,
                      printer.compose_list(cache),
