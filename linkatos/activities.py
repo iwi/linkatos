@@ -70,7 +70,7 @@ def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
         if event['type'] == 'message' and 'username' not in event:
             url = parser.parse_url_message(event)
 
-            if is_new(url):
+            if is_new(url, bot_id):
                 return cch.add(url, cache, slack_client)
 
             if message.to_bot(event['text'], bot_id):
@@ -78,14 +78,14 @@ def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
                 purge_request = parser.parse_purge_request(event)
 
                 if list_request is not None and list_request['type'] == 'list_request':
-                    printer.list_cache(cache,
-                                       list_request['channel'],
-                                       slack_client)
+                    cch.display(cache,
+                                list_request['channel'],
+                                slack_client)
                     return cache
 
                 if purge_request is not None and \
                    purge_request['type'] == 'purge_request' and \
-                   not is_empty_list(cache):
+                   not cch.is_empty(cache):
                     cch.extract_url_by_index(cache,
                                              purge_request['index'] - 1)
                     cch.display(cache,
