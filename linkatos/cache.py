@@ -39,6 +39,7 @@ def extract_url_by_id(cache, reaction_to_id):
 def extract_url_by_index(cache, index):
     """
     Extracts a url from the cache based on its position in it.
+    When the cache is empty the command is ignored.
     """
     if (index > len(cache) - 1) or (index < 0):
         return None
@@ -50,7 +51,8 @@ def extract_url_by_index(cache, index):
 
 def display(cache, channel, slack_client):
     """
-    Displays the list of elements in the cache to a specific channel in Slack.
+    Displays the list of elements in the cache to a specific channel in Slack,
+    and calls the list composer which formats the list to be printed.
     """
     printer.bot_says(channel,
                      printer.compose_list(cache),
