@@ -5,56 +5,58 @@ from . import reaction as react
 from . import message
 from . import cache as cch
 
+
 def is_empty(events):
-"""
-Checks if a batch of Slack events is `None` or has zero elements.
-"""
+    """
+    Checks if a batch of Slack events is `None` or has zero elements.
+    """
     return ((events is None) or (len(events) == 0))
 
 
 def is_new(element, bot_id):
-"""
-Checks if there is a new element(url) by verifying that is  not `None` and that
-it is not from the bot.
-The input is supposed to be a Slack event, but that's currently not verified.
-"""
+    """
+    Checks if there is a new element(url) by verifying that is  not `None` and
+    that it is not from the bot.
+    The input is supposed to be a Slack event, but that's currently not
+    verified.
+    """
     return element is not None and is_not_from_bot(bot_id, element['user'])
 
 
 def is_not_from_bot(bot_id, user_id):
-"""
-Compares two bot ids and verifies that they're different.
+    """
+    Compares two bot ids and verifies that they're different.
 
-is this really necessary??
-"""
+    is this really necessary??
+    """
     return not bot_id == user_id
 
 
 def is_unfurled(event):
-"""
-Checks if a Slack event comes from unfurling a url.
+    """
+    Checks if a Slack event comes from unfurling a url.
 
-Currently assumes that any such message can be identified by the fact that it
-contains a 'previous_message' field.
-"""
+    Currently assumes that any such message can be identified by the fact that
+    it contains a 'previous_message' field.
+    """
     return 'previous_message' in event
 
 
 def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
-"""
-Consumes batches of slack events and runs the possible actions.
+    """
+    Consumes batches of slack events and runs the possible actions.
 
-Reads new batches of Slack events.
-Selects those events that need to be actioned.
-Actionable events are:
-    - of 'type' message and contain a url
-    - are of 'type' reaction_added and respond to a cached url with either a
-    :+1: or a :-1:
-    - of 'type' message and are either:
-        + @linkatos list
-        + @linkatos purge <i>
-        where <i> is the ith element of the cache
-"""
+    Reads new batches of Slack events.
+    Selects those events that need to be actioned.
+    Actionable events are:
+        - of 'type' message and contain a url
+        - are of 'type' reaction_added and respond to a cached url with either
+        a :+1: or a :-1:
+        - of 'type' message and are either:
+            + @linkatos list
+            + @linkatos purge <i>
+            where <i> is the ith element of the cache
+    """
     # Read slack events
     events = slack_client.rtm_read()
 

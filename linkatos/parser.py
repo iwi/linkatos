@@ -1,9 +1,10 @@
 from . import message
 
+
 def parse_url_message(event):
-"""
-When there is a url in a Slack event builds an object of type 'url'
-"""
+    """
+    When there is a url in a Slack event builds an object of type 'url'
+    """
     url = message.extract_url(event['text'])
 
     if url is None:
@@ -21,10 +22,10 @@ When there is a url in a Slack event builds an object of type 'url'
 
 
 def parse_reaction_added(event):
-"""
-Builds an object of type 'reaction', based on a 'reaction_added' Slack
-element.
-"""
+    """
+    Builds an object of type 'reaction', based on a 'reaction_added' Slack
+    element.
+    """
     reaction = {
         'reaction': event['reaction'],
         'channel': event['item']['channel'],
@@ -38,10 +39,10 @@ element.
 
 
 def parse_list_request(event):
-"""
-When the Slack event contains '@linkatos list' it prints out the list of
-cached urls.
-"""
+    """
+    When the Slack event contains '@linkatos list' it prints out the list of
+    cached urls.
+    """
     if not message.is_list_request(event['text']):
         return None
 
@@ -54,10 +55,10 @@ cached urls.
 
 
 def parse_purge_request(event):
-"""
-When the Slack event contains '@linkatos pruge <number>' it purges the
-element number <number> from the cache.
-"""
+    """
+    When the Slack event contains '@linkatos pruge <number>' it purges the
+    element number <number> from the cache.
+    """
     index = message.purge_request(event['text'])
     if index is None:
         return None
