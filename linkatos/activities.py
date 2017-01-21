@@ -15,10 +15,8 @@ def is_empty(events):
 
 def is_usable(element, bot_id):
     """
-    Checks if there is a new element(url) by verifying that is  not `None` and
-    that it is not from the bot.
-    The input is supposed to be a Slack event, but that's currently not
-    verified.
+    Checks if there is a new element(url) that is usable, by verifying that is
+    not `None` and that it is not from the bot.
     """
     return element is not None and is_not_from_bot(bot_id, element['user'])
 
