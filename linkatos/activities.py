@@ -13,7 +13,7 @@ def is_empty(events):
     return ((events is None) or (len(events) == 0))
 
 
-def is_new(element, bot_id):
+def is_usable(element, bot_id):
     """
     Checks if there is a new element(url) by verifying that is  not `None` and
     that it is not from the bot.
@@ -54,7 +54,7 @@ def message_consumer(event, cache, slack_client, bot_id, fb_credentials,
     """
     url = parser.parse_url_message(event)
 
-    if is_new(url, bot_id):
+    if is_usable(url, bot_id):
         return cch.add(url, cache, slack_client)
 
     if message.to_bot(event['text'], bot_id):
@@ -77,6 +77,10 @@ def message_consumer(event, cache, slack_client, bot_id, fb_credentials,
                         slack_client)
             return cache
 
+        return cache
+
+    return cache
+
 
 def reaction_added_consumer(event, cache, fb_credentials, firebase):
     """
@@ -91,6 +95,8 @@ def reaction_added_consumer(event, cache, fb_credentials, firebase):
         react.handle(reaction['reaction'], selected_url['url'],
                      fb_credentials, firebase)
         return cache
+
+    return cache
 
 def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
     """
