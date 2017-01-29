@@ -1,5 +1,50 @@
 import pytest
 from linkatos import cache as cch
+from linkatos.cache import Cache
+
+def test_init_cache():
+    assert isinstance(Cache([]), Cache)
+
+
+def test_is_empty():
+    c = Cache([])
+    assert c.is_empty()
+
+
+def test_is_not_empty():
+    c = Cache([1])
+    assert not c.is_empty()
+
+
+def test_add():
+    element = {'id': 'a'}
+    c = Cache([])
+    c.add(element)
+    assert c.find('a') == element
+
+
+def test_find():
+    element = {'id': 'a'}
+    c = Cache([element])
+    assert c.find('a') == element
+
+
+def test_find_nothing():
+    element = {'id': 'a'}
+    c = Cache([element])
+    assert c.find('b') is None
+
+
+def test_find_by_index():
+    element = {'id': 'a'}
+    c = Cache([element])
+    assert c.find_by_index(0) == element
+
+
+def test_find_by_index_nothing():
+    element = {'id': 'a'}
+    c = Cache([element])
+    assert c.find_by_index(1) is None
 
 
 def test_equal_ids():
