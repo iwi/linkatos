@@ -1,4 +1,4 @@
-mypy-lang==0.4.5
+mypy==0.470
 pytest==3.0.3
 slackclient==1.0.2
 pyrebase==3.0.24
