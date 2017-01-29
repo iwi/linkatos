@@ -2,3 +2,4 @@ mypy-lang==0.4.5
 pytest==3.0.3
 slackclient==1.0.2
 pyrebase==3.0.24
+pylint==1.6.5

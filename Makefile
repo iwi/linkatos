@@ -34,6 +34,10 @@ typecheck:
 	@$(DOCKER_TASK) $(image) mypy --silent-imports $(EXTRA_FLAGS) $(FILE_LIST)
 .PHONY: typecheck
 
+lint:
+	@$(DOCKER_TASK) $(image) pylint linkatos
+.PHONY: lint
+
 test:
 ifdef JUNIT
 	@$(DOCKER_TASK) $(image) ./test_runner.sh
