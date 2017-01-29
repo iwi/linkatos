@@ -48,7 +48,7 @@ shell:
                   --env FB_API_KEY=$(FB_API_KEY) \
                   --env FB_USER=$(FB_USER) \
                   --env FB_PASS=$(FB_PASS) \
-									$(image) bash
+                  $(image) bash
 .PHONY: shell
 
 repl:
