@@ -76,6 +76,15 @@ make build test
 ```
 
 
+## Lint
+
+To run the linter:
+
+```sh
+make build lint
+```
+
+
 ## Tools
 
 The initial choices of tools are:

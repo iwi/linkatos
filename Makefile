@@ -31,8 +31,15 @@ logs:
 typecheck: FILE_LIST = $(filter-out %/utils.py, $(wildcard linkatos/*.py))
 typecheck: EXTRA_FLAGS = $(if $(VERBOSE), --stats)
 typecheck:
-	@$(DOCKER_TASK) $(image) mypy --silent-imports $(EXTRA_FLAGS) $(FILE_LIST)
+	@$(DOCKER_TASK) $(image) \
+                  mypy --ignore-missing-imports \
+                       --follow-imports=skip \
+                       $(EXTRA_FLAGS) $(FILE_LIST)
 .PHONY: typecheck
+
+lint:
+	@$(DOCKER_TASK) $(image) pylint linkatos
+.PHONY: lint
 
 test:
 ifdef JUNIT
@@ -48,7 +55,7 @@ shell:
                   --env FB_API_KEY=$(FB_API_KEY) \
                   --env FB_USER=$(FB_USER) \
                   --env FB_PASS=$(FB_PASS) \
-									$(image) bash
+                  $(image) bash
 .PHONY: shell
 
 repl:
