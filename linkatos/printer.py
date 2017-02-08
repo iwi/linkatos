@@ -1,3 +1,6 @@
+"""
+This module includes functions for the bot to display messages Slack.
+"""
 def bot_says(channel, text, slack_client):
     """
     Posts some text to a specific slack channel.

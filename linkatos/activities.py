@@ -1,6 +1,9 @@
+"""
+This module handles different types of inputs received from Slack.
+"""
+
+
 from . import parser
-from . import printer
-from . import firebase as fb
 from . import reaction as react
 from . import message
 from . import cache as cch
@@ -10,7 +13,7 @@ def is_empty(events):
     """
     Checks if a batch of Slack events is `None` or has zero elements.
     """
-    return ((events is None) or (len(events) == 0))
+    return (events is None) or (len(events) == 0)
 
 
 def is_usable(element, bot_id):
@@ -40,8 +43,7 @@ def is_unfurled(event):
     return 'previous_message' in event
 
 
-def message_consumer(event, cache, slack_client, bot_id, fb_credentials,
-                     firebase):
+def message_consumer(event, cache, slack_client, bot_id):
     """
     Consumes an event of type 'message' that contains a user.
     It looks inside the 'text' field for:
@@ -114,8 +116,7 @@ def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
             return cache
 
         if event['type'] == 'message' and 'username' not in event:
-            return message_consumer(event, cache, slack_client, bot_id,
-                                    fb_credentials, firebase)
+            return message_consumer(event, cache, slack_client, bot_id)
 
         if event['type'] == 'reaction_added' and len(cache) > 0:
             return reaction_added_consumer(event, cache, fb_credentials,
