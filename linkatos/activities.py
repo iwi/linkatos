@@ -113,6 +113,9 @@ def event_consumer(cache, slack_client, bot_id, fb_credentials, firebase):
         if is_unfurled(event):
             return cache
 
+        # The condition 'username' not in event is used to avoid some
+        # unnecessary bot messages. Maybe a better more direct approach should
+        # be used in the future.
         if event['type'] == 'message' and 'username' not in event:
             return message_consumer(event, cache, slack_client, bot_id,
                                     fb_credentials, firebase)
