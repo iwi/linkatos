@@ -33,6 +33,7 @@ if __name__ == '__main__':
 
         while True:
             time.sleep(1)  # 1 second delay after reading
+            print('.')
 
             # note that url message is returned to keep it over several cylcles
             # in whilst we wait for an answer

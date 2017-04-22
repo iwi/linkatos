@@ -3,6 +3,7 @@
 ## Summary
 
 This slackbot:
+
   - Detects any url posted on a channel where the bot is invited, and
   - Captures the detected urls into a database
 
@@ -24,6 +25,32 @@ been stored or ignored.
 Use `@linkatos purge <i>` to ask linkatos to remove the ith element from the
 cache as stated when running `@linkatos list`.
 
+## Setting up the credentials
+
+The bot needs credentials to connect to the Slack team and to connect to the
+Firebase database. The credentials need to be stored in a file named `.env` on
+the root _linkatos_ directory.
+
+The `.env` file must contain:
+
+```
+FB_API_KEY=xxxx
+FB_USER=xxxx
+FB_PASS=xxxx
+BOT_ID=xxxx
+SLACK_BOT_TOKEN=xxxx
+```
+_Note that tokens, username and password must not include quotes or extra
+spaces._
+
+The `FB_API_KEY` can be found on the _Project settings_ on your project's
+Firebase web UI.
+
+The `FB_USER` and `FB_PASS` can be added to the _Authentication_ settings
+within the project's Firebase web UI.
+
+The `BOT_ID` and the `SLACK_BOT_TOKEN` can be obtained from the Slack web
+client... (expand)
 
 ## Running the bot
 
@@ -35,10 +62,10 @@ First build the bot:
 make build
 ```
 
-Then
+Then install and run
 
 ```sh
-make install LINKATOS_SECRET=slacktoken LINKATOS_ID=botid FB_API_KEY=firebase_api_key FB_USER=firebase_user FB_PASS="firebase_password"
+make install
 ```
 
 To see the logs execute:
@@ -90,7 +117,7 @@ make build lint
 The initial choices of tools are:
   - Python 3 to create the bot
   - [Firebase](https://firebase.google.com) to store the links
-  - [Beep Boop](https://beepboophq.com) to host and run the bot
+  - _[Beep Boop](https://beepboophq.com) to host and run the bot_
 
 
 ## Sources

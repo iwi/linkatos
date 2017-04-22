@@ -88,8 +88,7 @@ def reaction_added_consumer(event, cache, fb_credentials, firebase):
     reaction = parser.parse_reaction_added(event)
 
     if react.is_known(reaction['reaction']):
-        selected_url = cch.extract_url_by_id(cache,
-                                             reaction['to_id'])
+        selected_url = cch.extract_url_by_id(cache, reaction['to_id'])
         react.handle(reaction['reaction'], selected_url['url'],
                      fb_credentials, firebase)
         return cache
