@@ -46,11 +46,7 @@ endif
 .PHONY: test
 
 shell:
-	@$(DOCKER_TASK) --env SLACK_BOT_TOKEN=$(LINKATOS_SECRET) \
-                  --env BOT_ID=$(LINKATOS_ID) \
-                  --env FB_API_KEY=$(FB_API_KEY) \
-                  --env FB_USER=$(FB_USER) \
-                  --env FB_PASS=$(FB_PASS) \
+	@$(DOCKER_TASK) --env-file $(PWD)/.env \
                   $(image) bash
 .PHONY: shell
 
