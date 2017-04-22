@@ -49,8 +49,15 @@ Firebase web UI.
 The `FB_USER` and `FB_PASS` can be added to the _Authentication_ settings
 within the project's Firebase web UI.
 
-The `BOT_ID` and the `SLACK_BOT_TOKEN` can be obtained from the Slack web
-client... (expand)
+The `SLACK_BOT_TOKEN` can be obtained by setting up a new bot user following
+https:/api.slack.com/bot-users instructions, or retrieved from
+https://slack_team_name.slack.com/apps and search for Bots.
+
+To obtain the `BOT_ID` run:
+```sh
+export SLACK_BOT_TOKEN=xxxx
+python print_bot_id.py
+```
 
 ## Running the bot
 
