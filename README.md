@@ -13,11 +13,11 @@ This slackbot:
 When the bot is invited to a channel it automatically caches the urls that are
 posted.
 
-Use a :+1: reaction to the message where the url was posted the bot stores the
-url into a Firebase database.
+Use a :+1: reaction to the message where the url was posted for the bot to store
+the url into a Firebase database.
 
-Use a :-1: reaction to the message where the url was posted the bot ignores
-that url.
+Use a :-1: reaction to the message where the url was posted for the bot to
+ignore that url.
 
 Use `@linkatos list` to ask linkatos to list all cached urls that have not yet
 been stored or ignored.
@@ -50,7 +50,7 @@ The `FB_USER` and `FB_PASS` can be added to the _Authentication_ settings
 within the project's Firebase web UI.
 
 The `SLACK_BOT_TOKEN` can be obtained by setting up a new bot user following
-https:/api.slack.com/bot-users instructions, or retrieved from
+https://api.slack.com/bot-users instructions, or retrieved from
 https://slack_team_name.slack.com/apps and search for Bots.
 
 To obtain the `BOT_ID` run:
